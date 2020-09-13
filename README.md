@@ -1,4 +1,3 @@
--    video script for SimpleTV IPTV Player v0.5.0 b12.7.5
+-    skin west_side, portal and video script for SimpleTV IPTV Player v0.5.0 b12.7.5
+-    http://iptv.gen12.net/bugtracker/view.php?id=1596
 -    http://iptv.gen12.net
-
-
