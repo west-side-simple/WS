@@ -18,15 +18,17 @@
 	local titul_rezka = '<a href = "simpleTVLua:m_simpleTV.Control.PlayAddress(\'https://rezka.ag\')"><img src="https://rezka.ag/templates/hdrezka/images/hdrezka-logo.png" height="54" align="top"></a>'
 	local titul_hevc = '<a href = "simpleTVLua:m_simpleTV.Control.PlayAddress(\'https://rips.club\')"><img src="simpleTVImage:./luaScr/user/westSide/icons/h265.png" height="54" align="top"></a>'
 	local titul_rezka_tor = '<a href = "simpleTVLua:m_simpleTV.Control.PlayAddress(\'https://rezka.cc\/\')"><img src="https://rezka.cc/apple-touch-icon.png" height="54" align="top"></a>'
-	local search_home = '<a href = "simpleTVLua:m_simpleTV.Control.PlayAddress(\'https://rezka.cc\/\')"><img src="simpleTVImage:./luaScr/user/westSide/icons/home.jpg" width = "320"></a>'
-	local search_movies = '<a href = "simpleTVLua:m_simpleTV.Control.PlayAddress(\'https://rezka.cc/films\')"><img src="simpleTVImage:./luaScr/user/westSide/icons/movies.jpg" width = "320"></a>'
-	local search_tvshows = '<a href = "simpleTVLua:m_simpleTV.Control.PlayAddress(\'https://rezka.cc/series\')"><img src="simpleTVImage:./luaScr/user/westSide/icons/tvshows.jpg" width = "320"></a>'
-	local search_anime = '<a href = "simpleTVLua:m_simpleTV.Control.PlayAddress(\'https://rezka.cc/animation\')"><img src="simpleTVImage:./luaScr/user/westSide/icons/anime.jpg" width = "320"></a>'
-	local search_kids = '<a href = "simpleTVLua:m_simpleTV.Control.PlayAddress(\'https://rezka.cc/cartoons\')"><img src="simpleTVImage:./luaScr/user/westSide/icons/kids.jpg" width = "320"></a>'
-	local start_search = '<tr><td style="padding: 5px 5px 0px;">' .. search_movies .. '</td>' ..
-	'<td style="padding: 5px 5px 0px;">' .. search_tvshows .. '</td>' ..
-	'<td style="padding: 5px 5px 0px;">' .. search_anime .. '</td>' ..
-	'<td style="padding: 5px 5px 0px;">' .. search_kids .. '</td></tr></table>'
+	local titul_yt = '<a href = "simpleTVLua:m_simpleTV.Control.PlayAddress(\'https://www.youtube.com/feed/channels\')"><img src="simpleTVImage:./luaScr/user/westSide/icons/menuYT.png" height="54" align="top"></a>'
+	local titul_lostfilm = '<a href = "simpleTVLua:m_simpleTV.Control.PlayAddress(\'https://www.lostfilm.tv/new\/\')"><img src="https://www.lostfilm.tv/favicon.ico" height="54" align="top"></a>'
+	local search_home = '<a href = "simpleTVLua:m_simpleTV.Control.PlayAddress(\'https://rezka.cc\/\')"><img src="simpleTVImage:./luaScr/user/westSide/icons/home.jpg" width = "330"></a>'
+	local search_movies = '<a href = "simpleTVLua:m_simpleTV.Control.PlayAddress(\'https://rezka.cc/films\')"><center><img src="simpleTVImage:./luaScr/user/westSide/icons/movies.jpg" width = "330"></a>'
+	local search_tvshows = '<a href = "simpleTVLua:m_simpleTV.Control.PlayAddress(\'https://rezka.cc/series\')"><center><img src="simpleTVImage:./luaScr/user/westSide/icons/tvshows.jpg" width = "330"></a>'
+	local search_anime = '<a href = "simpleTVLua:m_simpleTV.Control.PlayAddress(\'https://rezka.cc/animation\')"><center><img src="simpleTVImage:./luaScr/user/westSide/icons/anime.jpg" width = "330"></a>'
+	local search_kids = '<a href = "simpleTVLua:m_simpleTV.Control.PlayAddress(\'https://rezka.cc/cartoons\')"><center><img src="simpleTVImage:./luaScr/user/westSide/icons/kids.jpg" width = "330"></a>'
+	local start_search = '<tr><td style="padding: 5px 10px 0px;">' .. search_movies .. '</td>' ..
+	'<td style="padding: 5px 10px 0px;">' .. search_tvshows .. '</td>' ..
+	'<td style="padding: 5px 10px 0px;">' .. search_anime .. '</td>' ..
+	'<td style="padding: 5px 10px 0px;">' .. search_kids .. '</td></tr></table>'
 	dataEN = os.date ("%a %d %b %Y %H:%M")
 	dataRU = dataEN:gsub('Sun', 'Вс'):gsub('Mon', 'Пн'):gsub('Tue', 'Вт'):gsub('Wed', 'Ср'):gsub('Thu', 'Чт'):gsub('Fri', 'Пт'):gsub('Sat', 'Сб')
 	dataRU = dataRU:gsub('Jan', 'Янв'):gsub('Feb', 'Фев'):gsub('Mar', 'Мар'):gsub('Apr', 'Апр'):gsub('May', 'Май'):gsub('Jun', 'Июн'):gsub('Jul', 'Июл'):gsub('Aug', 'Авг'):gsub('Sep', 'Сен'):gsub('Oct', 'Окт'):gsub('Nov', 'Ноя'):gsub('Dec', 'Дек')
@@ -47,10 +49,10 @@
 		end
 	answer = answer:gsub('\n\n', ' '):gsub('\n', ' '):gsub('  ', '')
 	local title = answer:match('"si%-title">(.-)<') or answer:match('<h1 class="h1__">(.-)</h1>') or 'HDRezka'
-	rezka_poisk = ' <a href = "simpleTVLua:m_simpleTV.Control.PlayAddress(\'#' .. title .. '\')"><img src="https://rezka.cc/apple-touch-icon.png" height="36" align="top"></a>'
+	rezka_poisk = ' <a href = "simpleTVLua:m_simpleTV.Control.PlayAddress(\'#' .. title .. '\')"><img src="simpleTVImage:./luaScr/user/westSide/icons/Preview.png" height="54" align="top"></a>'
 	local cover = answer:match('<img src="([^"]+%.png)') or answer:match('<img src="([^"]+%.jpg)')
 	cover_str = answer:match('<div class="si%-cover">(.-)</div>')
-	if cover_str then cover_str = cover_str:gsub('%">', '\')">'):gsub('%/>', 'height="320">'):gsub('href=%"', 'href = "simpleTVLua:m_simpleTV.Control.PlayAddress(\'' .. host) end
+	if cover_str then cover_str = cover_str:gsub('%">', '\')">'):gsub('%/>', 'height="480">'):gsub('href=%"', 'href = "simpleTVLua:m_simpleTV.Control.PlayAddress(\'' .. host) end
 	answer_info = answer:match('<div class="fullstory%-wrapper">.-<div class="download%-wrapper">')
 	if answer_info then
 	desc1 = answer_info:match('(<h1 class="si%-title">.-)<div class="si%-story">') or answer_info:match('(<h1 class="si%-title">.-)<div class="download%-wrapper">')
@@ -68,7 +70,7 @@
 	end
 -- Флаги стран
                             local function get_country_flags(country_ID)
-					        country_flag = '<img src="simpleTVImage:./luaScr/user/westSide/country/' .. country_ID .. '.png" height="36" align="top">'
+					        country_flag = '<img src="simpleTVImage:./luaScr/user/westSide/country/' .. country_ID .. '.png" height="54" align="top">'
 					        return country_flag:gsub('"', "'")
 							end
 							local tmp_country_ID = ''
@@ -217,7 +219,7 @@
 	retAdr:match('S(%d+)E(%d+)')
 	tab[i].Name = i - e1 + 1 .. ' серия'
 	tab[i].InfoPanelDesc = '<html><body bgcolor="#434750" style="background-image: url(simpleTVImage:./luaScr/user/westSide/icons/BG02_1080p.jpg);"><table width="99%"><tr><td style="padding: 10px 10px 5px; vertical-align: middle;">' .. cover_str ..
-	'</td><td style="padding: 10px 5px 0px; color: #BBBBBB; vertical-align: middle;"><h5>' .. titul_rezka_tor .. titul_hevc .. titul_rezka .. ishd .. '</h5>' .. desc1 .. '</td></tr></table>' .. desc2 .. '</html>'
+	'</td><td style="padding: 10px 5px 0px; color: #BBBBBB; vertical-align: middle;"><h5>' .. titul_rezka_tor .. titul_hevc .. titul_yt .. titul_rezka .. titul_lostfilm .. ishd .. '</h5>' .. desc1 .. '</td></tr></table>' .. desc2 .. '</html>'
 	tab[i].InfoPanelDesc = tab[i].InfoPanelDesc:gsub('"', "\"")
 	tab[i].InfoPanelTitle = name .. ' ' .. tab[i].Name
 	tab[i].InfoPanelName = title
@@ -234,6 +236,11 @@
 		else
 			tab.ExtButton1 = {ButtonEnable = true, ButtonName = '✕', ButtonScript = 'OnMultiAddressCancel_HDRezka()'}
 		end
+		if m_simpleTV.User.paramScriptForSkin_buttonOptions then
+			tab.ExtButton0 = {ButtonEnable = true, ButtonImageCx = 45, ButtonImageCy= 45, ButtonImage = m_simpleTV.User.paramScriptForSkin_buttonOptions, ButtonScript = 'm_simpleTV.Control.ExecuteAction(63)'}
+		else
+			tab.ExtButton0 = {ButtonEnable = true, ButtonName = '⚙', ButtonScript = 'm_simpleTV.Control.ExecuteAction(63)'}
+		end		
 	m_simpleTV.Control.CurrentTitle_UTF8 = title
 	m_simpleTV.OSD.ShowMessageT({text = title, color = 0xff9999ff, showTime = 1000 * 5, id = 'channelName'})
 	m_simpleTV.OSD.ShowSelect_UTF8(title .. ' ' .. name, 0, tab, 8000, 2 + 64)
@@ -248,8 +255,8 @@
 	tab[1] = {}
 	tab[1].Id = 1
 	tab[1].Name = title
-	tab[1].InfoPanelDesc = '<html><body bgcolor="#434750" style="background-image: url(simpleTVImage:./luaScr/user/westSide/icons/BG02_720p.jpg);"><table width="99%"><tr><td style="padding: 10px 10px 5px; vertical-align: middle;">' .. cover_str ..
-	'</td><td style="padding: 10px 5px 0px; color: #BBBBBB; vertical-align: middle;"><h5>' .. titul_rezka_tor .. titul_hevc .. titul_rezka .. ishd .. '</h5>' .. desc1 .. '</td></tr></table>' .. desc2 .. '</html>'
+	tab[1].InfoPanelDesc = '<html><body bgcolor="#434750" style="background-image: url(simpleTVImage:./luaScr/user/westSide/icons/BG02_1080p.jpg);"><table width="99%"><tr><td style="padding: 10px 10px 5px; vertical-align: middle;">' .. cover_str ..
+	'</td><td style="padding: 10px 5px 0px; color: #BBBBBB; vertical-align: middle;"><h5>' .. titul_rezka_tor .. titul_hevc .. titul_yt .. titul_rezka .. titul_lostfilm .. ishd .. '</h5>' .. desc1 .. '</td></tr></table>' .. desc2 .. '</html>'
 	tab[1].InfoPanelDesc = tab[1].InfoPanelDesc:gsub('"', "\"")
 	tab[1].InfoPanelTitle = name
 	tab[1].InfoPanelName = title
@@ -262,6 +269,11 @@
 			tab.ExtButton1 = {ButtonEnable = true, ButtonImageCx = 45, ButtonImageCy= 45, ButtonImage = m_simpleTV.User.paramScriptForSkin_buttonClose, ButtonScript = 'OnMultiAddressCancel_HDRezka()'}
 		else
 			tab.ExtButton1 = {ButtonEnable = true, ButtonName = '✕', ButtonScript = 'OnMultiAddressCancel_HDRezka()'}
+		end
+		if m_simpleTV.User.paramScriptForSkin_buttonOptions then
+			tab.ExtButton0 = {ButtonEnable = true, ButtonImageCx = 45, ButtonImageCy= 45, ButtonImage = m_simpleTV.User.paramScriptForSkin_buttonOptions, ButtonScript = 'm_simpleTV.Control.ExecuteAction(63)'}
+		else
+			tab.ExtButton0 = {ButtonEnable = true, ButtonName = '⚙', ButtonScript = 'm_simpleTV.Control.ExecuteAction(63)'}
 		end
 	m_simpleTV.OSD.ShowSelect_UTF8('HD-Rezka', 0, tab, 8000, 32 + 64 + 128)
 	m_simpleTV.Control.SetTitle(title)
@@ -336,8 +348,8 @@
 							if country_s:match('США') then tmp_country_ID = 'us' country_ID = get_country_flags(tmp_country_ID) .. country_ID end
 -------------
 				if ks == 5 then desc_s = desc_s .. '</tr><tr>' ks = 1 end
-				desc_s = desc_s .. '<td style="padding: 5px 5px 5px; color: #EBEBEB;"><a href = "simpleTVLua:m_simpleTV.Control.PlayAddress(\'' .. host .. adr_s ..
-				'\')"><center><img src="' .. logo_s .. '" height = "480" width = "320"></a><center><h5><font color=#00FA9A>' .. name_s ..
+				desc_s = desc_s .. '<td style="padding: 5px 10px 5px; color: #EBEBEB;"><a href = "simpleTVLua:m_simpleTV.Control.PlayAddress(\'' .. host .. adr_s ..
+				'\')"><center><img src="' .. logo_s .. '" height = "495" width = "330"></a><center><h5><font color=#00FA9A>' .. name_s ..
 				'</font></h5><h5><font color=#CD7F32>' .. year_s .. '</font> ' .. country_ID .. genre_s .. '</h5></td>'
 				ks = ks + 1
 		end
@@ -350,7 +362,7 @@
 	answer_page = answer_page:gsub('&laquo;', ' « '):gsub('&raquo;', ' » '):gsub('<span class="btn active">', ' '):gsub('</span>', ' '):gsub('<a class="btn disabled">%.%.%.</a>', ' ... ')
 	answer_page = answer_page:gsub('<a class="btn" href="', ' <a href = "simpleTVLua:m_simpleTV.Control.PlayAddress%(\'' .. host):gsub('">', '\'\)" style="color: #BBBBBB; text-decoration: none;"> ')
 	page_str = '<font color=#EBEBEB>Серфинг по страницам: </font>' .. answer_page
-	page_str = '<table width="99%"><tr><td style="color: #CD7F32;"><center><h4>' .. page_str .. '</h4></td></tr></table>'
+	page_str = '<table width="99%"><tr><td style="color: #CD7F32;"><center><h3>' .. page_str .. '</h3></td></tr></table>'
 	else page_str = ''
 	end
 ------------------
@@ -361,7 +373,7 @@
 	tab[1].Id = 1
 	tab[1].Name = title
 	tab[1].InfoPanelDesc = '<html><body bgcolor="#434750" style="background-image: url(simpleTVImage:./luaScr/user/westSide/icons/BG01_1080p.png);"><table width="99%%"><tr><td colspan="4"><h3><center>' ..
-	titul_rezka_tor .. titul_hevc .. ' <font color=#CD7F32><b>' .. data .. ' </b></font>' .. titul_rezka .. '</h3></td></tr>' .. start_search ..
+	titul_rezka_tor .. titul_hevc .. ' <font color=#CD7F32><b>' .. data .. ' </b></font>' .. titul_yt .. titul_rezka .. titul_lostfilm .. '</h3></td></tr>' .. start_search ..
 	'</html><html><body bgcolor="#434750" style="background-image: url(simpleTVImage:./luaScr/user/westSide/icons/BG01_1080p.png);">' .. page_str .. desc_s .. page_str .. '</html>'
 	tab[1].InfoPanelDesc = tab[1].InfoPanelDesc:gsub('"', "\"")
 	tab[1].InfoPanelTitle = title

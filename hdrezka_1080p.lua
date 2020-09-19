@@ -25,7 +25,12 @@
 	local inAdr = m_simpleTV.Control.CurrentAddress
 	m_simpleTV.OSD.ShowMessageT({text = '', showTime = 1000, id = 'channelName'})
 	local logo = 'https://rezka.ag/templates/hdrezka/images/hdrezka-logo.png'
-	local background_chanel = 'https://radio-stream-1.obozrevatel.com/radiorelaxfm128.mp3'
+		if m_simpleTV.User.paramScriptForSkin_background_chanel then
+			background_chanel = m_simpleTV.User.paramScriptForSkin_background_chanel
+		else
+			background_chanel = 'https://radio-stream-1.obozrevatel.com/radiorelaxfm128.mp3'
+		end
+--	local background_chanel = 'https://radio-stream-1.obozrevatel.com/radiorelaxfm128.mp3'
 	local titul_hevc = '<a href = "simpleTVLua:m_simpleTV.Control.PlayAddress(\'https://rips.club\')"><img src="simpleTVImage:./luaScr/user/westSide/icons/h265.png" height="36" align="top"></a>'
 	local titul_rezka_tor = '<a href = "simpleTVLua:m_simpleTV.Control.PlayAddress(\'https://rezka.cc\/\')"><img src="https://rezka.cc/apple-touch-icon.png" height="36" align="top"></a>'
 	if not inAdr:match('^%$rezka') then
@@ -317,7 +322,7 @@
 	end
 	if answer:match('<h2>В качестве</h2>') then poisk_kinopoisk = '<a href = "simpleTVLua:m_simpleTV.Control.PlayAddress(\'*' .. name_rus .. '\')"><img src="simpleTVImage:./luaScr/user/westSide/icons/menuKP.png" height="36" align="top"></a>' else poisk_kinopoisk = '' end
 	if answer:match('<h2>В качестве</h2>') then poisk_youtube = '<a href = "simpleTVLua:m_simpleTV.Control.PlayAddress(\'-' .. name_rus .. '\')"><img src="simpleTVImage:./luaScr/user/westSide/icons/menuYT.png" height="36" align="top"></a>' else poisk_youtube = '' end
-	if not poisk_kinopoisk == '' and not poisk_youtube == '' then titul_hevc = '' end
+	if not poisk_kinopoisk == '' and not poisk_youtube == '' then titul_hevc = '' titul_rezka_tor = '' end
 	str_poisk = '<h5>' .. titul_rezka_tor .. titul_rezka .. titul_hevc .. t_rezka .. poisk_kinopoisk .. poisk_youtube .. '</h5>' or ''
 	local name_eng = answer:match('alternativeHeadline">(.-)</div>') or ''
 	local mpaa = answer:match('style="color: #666;">(.-+)') or ''
@@ -972,9 +977,6 @@
 			t.ExtButton1 = {ButtonEnable = true, ButtonImageCx = 45, ButtonImageCy= 45, ButtonImage = m_simpleTV.User.paramScriptForSkin_buttonClose, ButtonScript = 'OnMultiAddressCancel_rezka()'}
 		else
 			t.ExtButton1 = {ButtonEnable = true, ButtonName = '✕', ButtonScript = 'OnMultiAddressCancel_rezka()'}
-		end
-		if m_simpleTV.User.paramScriptForSkin_buttonOk then
-			t.OkButton = {ButtonImageCx = 45, ButtonImageCy= 45, ButtonImage = m_simpleTV.User.paramScriptForSkin_buttonOk}
 		end
 		m_simpleTV.OSD.ShowSelect_UTF8('HDrezka', 0, t, 8000, 32 + 64 + 128)
 	end
