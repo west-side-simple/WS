@@ -348,9 +348,9 @@ local prx = ''
 				m_simpleTV.Control.ExecuteAction(37)
 			end
 		end
-		title1 = answer:match('<title>(.-)</title>')
+		title1 = answer:match('<title>(.-)</title>') or ''
 		title1 = title1:gsub('%: кадры%, фото%, актеры%, персонажи и съемочная группа%, обсуждение эпизода.-$', ''):gsub('%. %- LostFilm%.TV%.', ''):gsub(' %– LostFilm%.TV%.', '')
-		title1 = title1:gsub('%. ', '<p>'):gsub(', ', ' - ')
+		title1 = title1:gsub('%. ', '<p>'):gsub(', ', ' - '):gsub('999 сезон', 'Дополнительные материалы')
 		local a1, j = {}, 1
 		local name, c, s, e
 			for ww in answer:gmatch('markEpisodeAsWatched.-</tr>') do
@@ -379,7 +379,7 @@ local prx = ''
 				if right_str ~= '' then right_str = right_str .. '<center><img src="simpleTVImage:./luaScr/user/westSide/icons/right.png" height="' .. 120*masshtab .. '">'
 				else right_str = '<center><img src="simpleTVImage:./luaScr/user/westSide/icons/right_no.png" height="' .. 120*masshtab .. '">' end
 				newadr = inAdr:gsub('%/season.-$', '') .. '/season_' .. s .. '/episode_' .. e
-				newadr = newadr:gsub('%/%/', '/'):gsub('https:%/', 'https://')
+				newadr = newadr:gsub('%/%/', '/'):gsub('https:%/', 'https://'):gsub('season_999', 'additional')
 				if not inAdr:match('episode%_') then 
 				poster_str = '<a href = "simpleTVLua:m_simpleTV.Control.PlayAddress(\'' .. newadr .. '/\')"><center><img src="' .. poster .. '" width="' .. 640*masshtab .. '">'
 				else
@@ -394,11 +394,11 @@ local prx = ''
 				.. reiting_lf .. '.png" height="' .. 20*masshtab .. '" align="top">' reiting_lf = tonumber(reiting_lf) else reiting_lf = '' reiting_lf_str = '' end
 				infodesc = ww:match('<div class="body" style="height:20px;overflow:hidden">(.-)</div>') or ''
 				seson_str = '<a href = "simpleTVLua:m_simpleTV.Control.PlayAddress(\'' .. inAdr:gsub('episode%_.-$', '') .. '\')"><center><img src="https://static.lostfilm.tv/Images/' .. c .. '/Posters/t_shmoster_s' .. s .. '.jpg" height="' .. 80*masshtab .. '">'
-				serial_str = '<a href = "simpleTVLua:m_simpleTV.Control.PlayAddress(\'' .. inAdr:gsub('season%_.-$', '') .. '\')"><center><img src="https://static.lostfilm.tv/Images/' .. c .. '/Posters/poster.jpg" height="' .. 80*masshtab .. '">'
+				serial_str = '<a href = "simpleTVLua:m_simpleTV.Control.PlayAddress(\'' .. inAdr:gsub('season%_.-$', ''):gsub('additional.-$', '') .. '\')"><center><img src="https://static.lostfilm.tv/Images/' .. c .. '/Posters/poster.jpg" height="' .. 80*masshtab .. '">'
 				a1[j] = {}
 				a1[j].Id = j
 				name = name:gsub('Длительность:.+', ''):gsub('%s+', ' ')
-				a1[j].Name = trim(name)				
+				a1[j].Name = trim(name):gsub('999 сезон', 'Дополнительные материалы')				
 				a1[j].Adress = host .. 'v_search.php?c=' .. c .. '&s=' .. s .. '&e=' .. e .. '&lostfilm'				
 --info				
 				a1[j].InfoPanelDesc = '<html><body bgcolor="#434750" ' .. background2 .. '><table width="99\%"><tr><td style="padding: 10px 10px 5px; vertical-align: middle;"><h3><center>'
@@ -413,6 +413,7 @@ local prx = ''
 				a1[j].InfoPanelDesc = a1[j].InfoPanelDesc:gsub('"', "\"")
 				a1[j].InfoPanelTitle = trim(name) .. ' | IMDb: ' .. reiting_imdb .. ', LFR: ' .. reiting_lf
 				a1[j].InfoPanelName = title .. sesons_name
+				a1[j].InfoPanelName = a1[j].InfoPanelName:gsub('999 сезон', 'Дополнительные материалы')
 				a1[j].InfoPanelShowTime = 60000
 				a1[j].InfoPanelLogo = poster
 --end info				
@@ -445,7 +446,7 @@ local prx = ''
 		end		
 		a1.ExtParams = {FilterType = 2}
 		if j == 2 then
-			a1[1].Name = title
+			a1[1].Name = title:gsub('999 сезон', 'Дополнительные материалы: ')
 			m_simpleTV.OSD.ShowSelect_UTF8('lostfilm', 0, a1, 5000, 2 + 64 + 32)
 			retAdr = a1[1].Adress
 			title = a1[1].Name
@@ -494,7 +495,7 @@ local prx = ''
 				t[i].name = name:gsub(',', ' '):gsub('%s%s+', ' ')
 				t[i].address = url1 .. adr
 				t[i].video_title = da .. ' | ' .. ser .. ' "' .. ser_name .. '" | LFR: ' .. rtg
-				t[i].video_desc = '<td style="padding: 10px 10px 5px; color: #EBEBEB; vertical-align: middle;"><a href = "simpleTVLua:m_simpleTV.Control.PlayAddress(\''.. t[i].address .. '\')"><img src="' .. t[i].logo ..
+				t[i].video_desc = '<td style="padding: 10px 5px 5px; color: #EBEBEB; vertical-align: middle;"><a href = "simpleTVLua:m_simpleTV.Control.PlayAddress(\''.. t[i].address .. '\')"><img src="' .. t[i].logo ..
 				'" width ="' .. 299*masshtab .. '"></a><h5><center>' .. ser .. ' <font color=#CD7F32>' .. da .. '</font></h5><h4><font color=#00FA9A>' .. t[i].name ..
 				'</font> <a href = "simpleTVLua:m_simpleTV.Control.PlayAddress(\'' .. adr_all .. '\')"><img style="float:right;" src="' .. icon .. 
 				'" height="' .. 36*masshtab .. '"></a></h4><h5><font color=#BBBBBB>' .. name_eng .. '</font></h5><h5>' .. ser_name .. '</h5><h5><font color=#BBBBBB>' .. ser_name_eng ..
@@ -579,7 +580,7 @@ elseif inAdr:match('lostfilm%.tv%/series%/%?type') then
 				t[i].logo = logo:gsub('^//', 'https://')
 				t[i].name = name:gsub(',', ' '):gsub('%s%s+', ' ')
 				t[i].address = url1 .. adr
-				t[i].video_desc = '<td style="padding: 10px 10px 5px; color: #EBEBEB; vertical-align: middle;"><a href = "simpleTVLua:m_simpleTV.Control.PlayAddress(\'' .. t[i].address .. 
+				t[i].video_desc = '<td style="padding: 10px 5px 5px; color: #EBEBEB; vertical-align: middle;"><a href = "simpleTVLua:m_simpleTV.Control.PlayAddress(\'' .. t[i].address .. 
 				'\')"><img src="' .. t[i].logo .. '" width ="' .. 299*masshtab .. '"></a><h4><font color=#00FA9A>' .. t[i].name ..
 				'</font></h4><h5><font color=#BBBBBB>' .. name_eng .. '</font></h5><h5>' .. status .. 
 				'</h5><h5><img src="https://www.lostfilm.tv/favicon.ico" height="' .. 20*masshtab .. 
