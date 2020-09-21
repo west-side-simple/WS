@@ -394,6 +394,9 @@ local prx = ''
 				.. reiting_lf .. '.png" height="' .. 20*masshtab .. '" align="top">' reiting_lf = tonumber(reiting_lf) else reiting_lf = '' reiting_lf_str = '' end
 				infodesc = ww:match('<div class="body" style="height:20px;overflow:hidden">(.-)</div>') or ''
 				seson_str = '<a href = "simpleTVLua:m_simpleTV.Control.PlayAddress(\'' .. inAdr:gsub('episode%_.-$', '') .. '\')"><center><img src="https://static.lostfilm.tv/Images/' .. c .. '/Posters/t_shmoster_s' .. s .. '.jpg" height="' .. 80*masshtab .. '">'
+				if retAdr:match('%/additional') then
+				seson_str = '<a href = "simpleTVLua:m_simpleTV.Control.PlayAddress(\'' .. inAdr .. '\')"><center><img src="https://static.lostfilm.tv/Images/' .. c .. '/Posters/icon.jpg" height="' .. 80*masshtab .. '">'
+				end
 				serial_str = '<a href = "simpleTVLua:m_simpleTV.Control.PlayAddress(\'' .. inAdr:gsub('season%_.-$', ''):gsub('additional.-$', '') .. '\')"><center><img src="https://static.lostfilm.tv/Images/' .. c .. '/Posters/poster.jpg" height="' .. 80*masshtab .. '">'
 				a1[j] = {}
 				a1[j].Id = j
