@@ -200,7 +200,7 @@ local prx = ''
 	local function GetLostfilmAddress(answer)	
 		local episodenumber = answer:match('<input type="text" value=".-%d.-сезон%,.-(%d).-серия"')
 		local isepisode = answer:match('<div class="inner%-box%-%-text">(.-)</div>')
-			if isepisode:gsub('[\r\n]', ''):match('серия')
+			if isepisode:gsub('[\r\n]', ''):match('серия') or isepisode:gsub('[\r\n]', ''):match('Дополнительные материалы')
 				then isepisode = ''
 				else isepisode = '$TORRENTINDEX=' .. tonumber(episodenumber) - 1
 			end
@@ -480,6 +480,7 @@ local prx = ''
 			retAdr = a1[id].Adress
 			title = title .. ' - ' .. m_simpleTV.User.lostfilm.Tabletitle[1].Name			
 		end
+		m_simpleTV.Control.ExecuteAction(108,0)
 		m_simpleTV.Control.ExecuteAction(108,1)
 	elseif inAdr:match('lostfilm%.tv%/new') then
 		local title = 'lostfilm'
