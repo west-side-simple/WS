@@ -364,14 +364,16 @@ local prx = ''
 				name = ww:match('<h1 class="title%-ru">(.-)</h1>') or ww:match('<div>(.-)<') or ''
 				c, s, e = ww:match('data%-code=\"(%d+)%-(%d+)%-(%d+)\"')
 					if not c or not s or not e then break end
-				if s == '999' then
-					name = e .. '. ' .. name:gsub('[\r\n]', '')
-				else
-					name = s .. ' сезон ' .. e .. ' серия - ' .. name:gsub('[\r\n]', '')
-				end
+
 				poster = ww:match('<div style="background:url%(\'(.-)\'%)%;"')
 				if poster then poster = 'https:' .. poster else
 				poster = 'https://static.lostfilm.tv/Images/' .. c .. '/Posters/e_' .. s .. '_' .. e .. '.jpg' end
+				if s == '999' then
+					name = e .. '. ' .. name:gsub('[\r\n]', '')
+					poster = 'https://static.lostfilm.tv/Images/' .. c .. '/Posters/poster.jpg'
+				else
+					name = s .. ' сезон ' .. e .. ' серия - ' .. name:gsub('[\r\n]', '')
+				end
 				for ww1 in answer:gmatch('<a.-</a>') do
 				if ww1:match('<div class="previous%-link active">') then 
 				left_str = '<a href = "simpleTVLua:m_simpleTV.Control.PlayAddress(\'' .. host .. ww1:match('<a href="(.-)">') .. '\')">'
