@@ -180,6 +180,7 @@ local prx = ''
 		end
 	 return index or 1
 	end
+	
 	function GetMovieQuality()
 		local t = m_simpleTV.User.lostfilm.ResolutionTable
 			if not t then return end
@@ -195,7 +196,14 @@ local prx = ''
 			end
 		end
 	end
-	local function GetLostfilmAddress(answer)
+	
+	local function GetLostfilmAddress(answer)	
+		local episodenumber = answer:match('<input type="text" value=".-%d.-сезон%,.-(%d).-серия"')
+		local isepisode = answer:match('<div class="inner%-box%-%-text">(.-)</div>')
+			if isepisode:gsub('[\r\n]', ''):match('серия')
+				then isepisode = ''
+				else isepisode = '$TORRENTINDEX=' .. tonumber(episodenumber) - 1
+			end
 		local t, i = {}, 1
 		local name, Adr, siz, sdhd
 			for name, Adr, siz in answer:gmatch('<div class="inner%-box%-%-label">(.-)<.- href="(.-)".-box%-%-desc"(.-)</div>') do
@@ -208,7 +216,7 @@ local prx = ''
 				end
 				t[i] = {}
 				t[i].Name = name:gsub('%s%s*', ' ')
-				t[i].Adress = 'torrent://' .. Adr
+				t[i].Adress = 'torrent://' .. Adr .. isepisode
 				if name:match('низкое') then
 					t[i].qlty = 1
 				elseif name:match('среднее') then
@@ -245,6 +253,7 @@ local prx = ''
 		end	
 		local index = GetMaxResolutionIndex(t)
 		m_simpleTV.User.lostfilm.Index = index
+--[[
 			if not answer:match('<div class="inner%-box%-%-text">.-серия') and not answer:match('<div class="inner%-box%-%-text">.-Дополнительные материалы') then
 				if i > 2 then
 --					t.ExtButton1 = {ButtonEnable = true, ButtonName = '✕'}
@@ -263,6 +272,7 @@ local prx = ''
 				title = m_simpleTV.User.lostfilm.title
 			 return retAdr, true
 			end
+--]]			
 		retAdr = t[index].Adress
 	 return retAdr
 	end
