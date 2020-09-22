@@ -307,7 +307,7 @@ local prx = ''
 				end
 		end
 		title = answer:match('<title>(.-)</title>') or 'lostfilm'
-		title = title:gsub(':.+', ''):gsub('%(.-%)', ''):gsub('Гид по.+', ''):gsub('%s%s+', ' '):gsub('%s%.', '.'):gsub('%.', '')
+		title = title:gsub(': кадры%,.+', ''):gsub('%(.-%)', ''):gsub('Гид по.+', ''):gsub('%s%s+', ' '):gsub('%s%.', '.'):gsub('%.', '')
 		m_simpleTV.User.lostfilm.title = title
 		local sesons_list = answer:match('<div class="left%-part".-<div class="select%-box".-(</option>.-</select>)')
 		local sesons_name = ''
