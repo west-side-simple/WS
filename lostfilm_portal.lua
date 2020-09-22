@@ -1,4 +1,4 @@
--- видеоскрипт для сайта http://www.lostfilm.tv (21/09/20)
+-- видеоскрипт для сайта http://www.lostfilm.tv (22/09/20)
 -- авторы nexterr, west_side
 -- необходим: Acestream
 -- логин, пароль установить в 'Password Manager', для id - lostfilm
@@ -20,6 +20,12 @@ local prx = ''
 	local titul_rezka_tor = '<a href = "simpleTVLua:m_simpleTV.Control.PlayAddress(\'https://rezka.cc\/\')"><img src="https://rezka.cc/apple-touch-icon.png" height="' .. 36*masshtab .. '" align="top"></a>'
 	local titul_lostfilm = '<a href = "simpleTVLua:m_simpleTV.Control.PlayAddress(\'https://www.lostfilm.tv/new\/\')"><img src="https://www.lostfilm.tv/favicon.ico" height="' .. 36*masshtab .. '" align="top"></a>'
 	local titul_yt = '<a href = "simpleTVLua:m_simpleTV.Control.PlayAddress(\'https://www.youtube.com/feed/channels\')"><img src="simpleTVImage:./luaScr/user/westSide/icons/menuYT.png" height="' .. 36*masshtab .. '" align="top"></a>'
+	local titul_lostfilm1 = '<a href = "simpleTVLua:m_simpleTV.Control.PlayAddress(\'https://www.lostfilm.tv/series/?type=search&s=1&t=1\')"><center><img src="https://vadideo.com/img/logos/lostfilm.png" width="' .. 299*masshtab .. '"></a>'
+	local titul_lostfilm2 = '<a href = "simpleTVLua:m_simpleTV.Control.PlayAddress(\'https://www.lostfilm.tv/series/?type=search&s=1&t=2\')"><center><img src="https://vadideo.com/img/logos/lostfilm.png" width="' .. 299*masshtab .. '"></a>'
+	local titul_lostfilm3 = '<a href = "simpleTVLua:m_simpleTV.Control.PlayAddress(\'https://www.lostfilm.tv/series/?type=search&s=1&t=5\')"><center><img src="https://vadideo.com/img/logos/lostfilm.png" width="' .. 299*masshtab .. '"></a>'
+	top_str = 	'<td style="padding: 10px 5px 5px; color: #EBEBEB; vertical-align: middle;">' .. titul_lostfilm1 .. '<h3><center><font color=#C154C1>Топ новых</font></h3></td>' ..
+				'<td style="padding: 10px 5px 5px; color: #EBEBEB; vertical-align: middle;">' .. titul_lostfilm2 .. '<h3><center><font color=#C154C1>Топ снимающихся</font></h3></td>' ..
+				'<td style="padding: 10px 5px 5px; color: #EBEBEB; vertical-align: middle;">' .. titul_lostfilm3 .. '<h3><center><font color=#C154C1>Топ завершенных</font></h3></td>'
 	dataEN = os.date ("%a %d %b %Y %H:%M")
 	dataRU = dataEN:gsub('Sun', 'Вс'):gsub('Mon', 'Пн'):gsub('Tue', 'Вт'):gsub('Wed', 'Ср'):gsub('Thu', 'Чт'):gsub('Fri', 'Пт'):gsub('Sat', 'Сб')
 	dataRU = dataRU:gsub('Jan', 'Янв'):gsub('Feb', 'Фев'):gsub('Mar', 'Мар'):gsub('Apr', 'Апр'):gsub('May', 'Май'):gsub('Jun', 'Июн'):gsub('Jul', 'Июл'):gsub('Aug', 'Авг'):gsub('Sep', 'Сен'):gsub('Oct', 'Окт'):gsub('Nov', 'Ноя'):gsub('Dec', 'Дек')
@@ -529,7 +535,7 @@ local prx = ''
 	tab[1].Name = title
 	tab[1].InfoPanelDesc = '<html><body bgcolor="#434750" ' .. background1 .. '><table width="99%"><tr><td colspan="3" style="padding: 10px 10px 5px; color: #EBEBEB; vertical-align: middle;"><h3><center>' ..
 	titul_rezka_tor .. titul_hevc .. ' <font color=#CD7F32><b>' .. data .. ' </b></font>' .. titul_yt .. titul_rezka .. titul_lostfilm .. '</h3></td></tr><hr></table>' ..
-	page_str .. '<table width="99%">' .. ser_new_str .. '</tr></table></html><html>' .. page_str .. '</html>'
+	page_str .. '<table width="99%"><tr>' .. top_str .. '</tr></table><table width="99%">' .. ser_new_str .. '</tr></table></html><html>' .. page_str .. '</html>'
 	tab[1].InfoPanelDesc = tab[1].InfoPanelDesc:gsub('"', "\"")
 	tab[1].InfoPanelTitle = title
 	tab[1].InfoPanelName = title
@@ -612,7 +618,7 @@ elseif inAdr:match('lostfilm%.tv%/series%/%?type') then
 	tab[1].Name = title
 	tab[1].InfoPanelDesc = '<html><body bgcolor="#434750" ' .. background1 .. '><table width="99%"><tr><td colspan="3" style="padding: 10px 10px 5px; color: #EBEBEB; vertical-align: middle;"><h3><center>' ..
 	titul_rezka_tor .. titul_hevc .. ' <font color=#CD7F32><b>' .. data .. ' </b></font>' .. titul_yt .. titul_rezka .. titul_lostfilm .. '</h3></td></tr><hr></table>' ..
-	page_str .. '<table width="99%">' .. serials_str .. '</tr></table></html><html>' .. page_str .. '</html>'
+	page_str .. '<table width="99%"><tr>' .. top_str .. '</tr></table><table width="99%">' .. serials_str .. '</tr></table></html><html>' .. page_str .. '</html>'
 	tab[1].InfoPanelDesc = tab[1].InfoPanelDesc:gsub('"', "\"")
 	tab[1].InfoPanelTitle = title
 	tab[1].InfoPanelName = title
