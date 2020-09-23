@@ -518,7 +518,12 @@ elseif not retAdr:match('&lostfilm') and not inAdr:match('lostfilm%.tv%/new') an
 		title1 = answer:match('<title>(.-)</title>') or ''
 		title1 = title1:gsub('%: кадры%, фото%, актеры%, персонажи и съемочная группа%, обсуждение эпизода.-$', ''):gsub('%. %- LostFilm%.TV%.', ''):gsub(' %– LostFilm%.TV%.', '')
 		title1 = title1:gsub('%. ', '<p>'):gsub(', ', ' - '):gsub('999 сезон', 'Дополнительные материалы')
-		local page_str = ''		
+		local page_str = ''
+		c_serial = answer:match('data%-code="(.-)%-')
+		if c_serial then logo_serial = 'https://static.lostfilm.tv/Images/' .. c_serial .. '/Posters/poster.jpg'
+		else logo_serial = 'https://www.tarablog.net.ua/wp-content/uploads/2014/01/lostfilm1.jpg'
+		end
+		icon_serial = logo_serial:gsub('poster%.jpg', 'image.jpg')
 		local a1, a2, j, i = {}, {}, 1, 1
 		local season_name, season_reiting, season_logo, season_status
 			for ww2 in answer:gmatch('<div class="serie%-block">.-</table>') do
@@ -526,12 +531,13 @@ elseif not retAdr:match('&lostfilm') and not inAdr:match('lostfilm%.tv%/new') an
 			season_reiting = ww2:match('title="Оценка сезона.->(.-)<') or 0
 			season_logo = ww2:match('<div class="poster%-zoom%-icon">.-<img src="(.-)"')
 			if season_logo then season_logo = 'https:' .. season_logo else
-			season_logo = 'https://www.lostfilm.tv/favicon.ico' end
+			season_logo = logo_serial end
 			season_status = ww2:match('<div class="details">(.-)</span>') or ''
 			season_status = season_status:gsub('<div class="half%-hor%-spacer"></div>', '<br/>'):gsub('<span class="gray%-text">', '')
 			page_str = page_str .. '<table width="99%"><tr><td style="padding: 0px 10px 5px; vertical-align: middle;"><center><img src="' .. season_logo .. 
 			'" width="' .. 150*masshtab .. '"></td><td style="padding: 0px 10px 5px; color: #EBEBEB; vertical-align: middle;"><h3><b><font color=#00FA9A>' .. season_name ..
-			'</font></b></h3><hr><h4>' .. season_status .. '</h4><h5><img src="https://www.lostfilm.tv/favicon.ico" height="' .. 20*masshtab .. 
+			'</font></b><a href = "simpleTVLua:m_simpleTV.Control.PlayAddress(\'' .. inAdr:gsub('%/season.-$', '') .. '\')"><img style="float:right;" src="' .. icon_serial ..
+				'" height="' .. 48*masshtab .. '"></a></h3><hr><h4>' .. season_status .. '</h4><h5><img src="https://www.lostfilm.tv/favicon.ico" height="' .. 20*masshtab .. 
 			'" align="top"><img src="simpleTVImage:./luaScr/user/westSide/stars/' .. tonumber(season_reiting) .. '.png" height="' .. 20*masshtab .. '" align="top"></h5></td></tr></table><hr>'
 		local name, c, s, e
 		local k, serii_str = 1, '<table width="99%"><tr>'
@@ -577,7 +583,7 @@ elseif not retAdr:match('&lostfilm') and not inAdr:match('lostfilm%.tv%/new') an
 		as[1].InfoPanelTitle = title1:gsub('<p>', ' - ')
 		as[1].InfoPanelName = title1:gsub('<p>', ' - ')
 		as[1].InfoPanelShowTime = 60000
-	    as[1].InfoPanelLogo = 'https://www.lostfilm.tv/favicon.ico'
+	    as[1].InfoPanelLogo = logo_serial
 		as[1].InfoPanelDesc = '<html><body bgcolor="#434750" ' .. background1 .. '><table width="99%"><tr><td colspan="3" style="padding: 10px 10px 5px; color: #EBEBEB; vertical-align: middle;"><h3><center>' ..
 	titul_rezka_tor .. titul_hevc .. ' <font color=#CD7F32><b>' .. data .. ' </b></font>' .. titul_yt .. titul_rezka .. titul_lostfilm .. '</h3></td></tr><hr></table>' .. page_str .. '</body></html>'
 		as[1].InfoPanelDesc = as[1].InfoPanelDesc:gsub('"', '\"')
@@ -599,6 +605,7 @@ elseif not retAdr:match('&lostfilm') and not inAdr:match('lostfilm%.tv%/new') an
 	m_simpleTV.OSD.ShowSelect_UTF8('LostFilm', 0, as, 8000, 32 + 64 + 128)
 	m_simpleTV.Control.SetTitle(title)
 	if m_simpleTV.Control.MainMode == 0 then
+		m_simpleTV.Interface.SetBackground({BackColor = 0, BackColorEnd = 255, PictFileName = logo_serial, TypeBackColor = 0, UseLogo = 3, Once = 1})
 		m_simpleTV.Control.ChangeChannelLogo(as[1].InfoPanelLogo, m_simpleTV.Control.ChannelID, 'CHANGE_IF_NOT_EQUAL')
 		m_simpleTV.Control.ChangeChannelName(title1:gsub('<p>', ' - '), m_simpleTV.Control.ChannelID, false)
 	end
