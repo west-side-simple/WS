@@ -417,6 +417,7 @@ local prx = ''
 				if retAdr:match('%/additional') then
 				seson_str = '<a href = "simpleTVLua:m_simpleTV.Control.PlayAddress(\'' .. inAdr .. '\')"><center><img src="https://static.lostfilm.tv/Images/' .. c .. '/Posters/icon.jpg" height="' .. 80*masshtab .. '">'
 				end
+				if inAdr:match('%/episode%_1%/') and not answer:match('onClick="PlayEpisode') then seson_str = '<center><img src="https://static.lostfilm.tv/Images/' .. c .. '/Posters/icon.jpg" height="' .. 80*masshtab .. '">' end
 				serial_str = '<a href = "simpleTVLua:m_simpleTV.Control.PlayAddress(\'' .. inAdr:gsub('season%_.-$', ''):gsub('additional.-$', '') .. '\')"><center><img src="https://static.lostfilm.tv/Images/' .. c .. '/Posters/poster.jpg" height="' .. 80*masshtab .. '">'
 				a1[j] = {}
 				a1[j].Id = j
