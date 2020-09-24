@@ -533,13 +533,14 @@ elseif not retAdr:match('&lostfilm') and not inAdr:match('lostfilm%.tv%/new') an
 			season_logo = ww2:match('<div class="poster%-zoom%-icon">.-<img src="(.-)"')
 			if season_logo then season_logo = 'https:' .. season_logo else
 			season_logo = logo_serial end
+			season_logo = season_logo:gsub('t_shmoster_s', 'shmoster_s')
 			season_status = ww2:match('<div class="details">(.-)</span>') or ''
 			season_status = season_status:gsub('<div class="half%-hor%-spacer"></div>', '<br/>'):gsub('<span class="gray%-text">', '')
 			page_str = page_str .. '<table width="99%"><tr><td style="padding: 0px 10px 5px; vertical-align: middle;"><center><img src="' .. season_logo .. 
-			'" width="' .. 150*masshtab .. '"></td><td style="padding: 0px 10px 5px; color: #EBEBEB; vertical-align: middle;"><h3><b><font color=#00FA9A>' .. season_name ..
-			'</font></b><a href = "simpleTVLua:m_simpleTV.Control.PlayAddress(\'' .. inAdr:gsub('%/season.-$', '') .. '\')"><img style="float:right;" src="' .. icon_serial ..
-				'" height="' .. 48*masshtab .. '"></a></h3><hr><h4>' .. season_status .. '</h4><h5><img src="https://www.lostfilm.tv/favicon.ico" height="' .. 20*masshtab .. 
-			'" align="top"><img src="simpleTVImage:./luaScr/user/westSide/stars/' .. tonumber(season_reiting) .. '.png" height="' .. 20*masshtab .. '" align="top"></h5></td></tr></table><hr>'
+			'" width="' .. 180*masshtab .. '"></td><td style="padding: 0px 10px 5px; color: #EBEBEB; vertical-align: middle;"><h3><b><font color=#00FA9A>' .. season_name ..
+			'</font></b></h3><h4>' .. season_status .. '</h4><h5><img src="https://www.lostfilm.tv/favicon.ico" height="' .. 20*masshtab .. 
+			'" align="top"><img src="simpleTVImage:./luaScr/user/westSide/stars/' .. tonumber(season_reiting) .. '.png" height="' .. 20*masshtab .. '" align="top"></h5></td><td><a href = "simpleTVLua:m_simpleTV.Control.PlayAddress(\'' .. inAdr:gsub('%/season.-$', '') .. '\')"><img style="float:right;" src="' .. icon_serial ..
+				'" height="' .. 60*masshtab .. '"></a></td></tr></table><hr>'
 		local name, c, s, e
 		local k, serii_str = 1, '<table width="99%"><tr>'
 			for ww in ww2:gmatch('markEpisodeAsWatched.-</tr>') do
