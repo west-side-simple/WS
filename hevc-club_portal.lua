@@ -1,4 +1,4 @@
--- видеоскрипт для сайта https://rips.club (24/09/20) v.3
+-- видеоскрипт для сайта https://rips.club (27/09/20) v.3
 -- ветка на bugtracker http://iptv.gen12.net/bugtracker/view.php?id=1596
 -- авторы nexterr, west_side
 -- открывает подобные ссылки:
@@ -245,7 +245,7 @@
 							if country and country:match('Украина') then tmp_country_ID = 'ua' country_ID = get_country_flags(tmp_country_ID) .. country_ID end
 							if country and country:match('США') or country and country:match('USA') then tmp_country_ID = 'us' country_ID = get_country_flags(tmp_country_ID) .. country_ID end
 --конец блока флаги стран
-				rezka_poisk = ' <a href = "simpleTVLua:m_simpleTV.Control.PlayAddress(\'#' .. name_rus .. '\')"><img src="https://rezka.cc/assets/images/favicon.ico" height="' .. 24*masshtab .. '" align="top"></a>'
+				rezka_poisk = ' <a href = "simpleTVLua:m_simpleTV.Control.PlayAddress(\'#' .. name_rus .. '\')"><img src="simpleTVImage:./luaScr/user/westSide/icons/Preview.png" height="' .. 36*masshtab .. '" align="top"></a>'
 				desc1 = '<h4><center><font color=#00FA9A>' .. name_rus .. rezka_poisk .. '</font></h4><h5><font color=#BBBBBB>' .. name_eng .. '</font></h5>'
 				desc1 = desc1 .. '<h5>' .. country_ID .. ' ' .. country .. ' <font color=#CD7F32>' .. year .. '</font></h5><h5><font color=#BBBBBB>' .. studia .. '</font></h5><h5>' .. genres_str .. '</h5>'
 				if director ~= '' and actors ~= '' then
@@ -402,7 +402,7 @@
 							if country and country:match('Украина') then tmp_country_ID = 'ua' country_ID = get_country_flags(tmp_country_ID) .. country_ID end
 							if country and country:match('США') or country and country:match('USA') then tmp_country_ID = 'us' country_ID = get_country_flags(tmp_country_ID) .. country_ID end
 --конец блока флаги стран
-				rezka_poisk = ' <a href = "simpleTVLua:m_simpleTV.Control.PlayAddress(\'#' .. name_rus .. '\')"><img src="https://rezka.cc/assets/images/favicon.ico" height="' .. 24*masshtab .. '" align="top"></a>'
+				rezka_poisk = ' <a href = "simpleTVLua:m_simpleTV.Control.PlayAddress(\'#' .. name_rus .. '\')"><img src="simpleTVImage:./luaScr/user/westSide/icons/Preview.png" height="' .. 36*masshtab .. '" align="top"></a>'
 				desc1 = '<h4><center><font color=#00FA9A>' .. name_rus:gsub('^.-%. ', '') .. rezka_poisk .. '</font></h4><h5><font color=#BBBBBB>' .. name_eng .. '</font></h5>'
 				desc1 = desc1 .. '<h5>' .. country_ID .. ' ' .. country .. ' <font color=#CD7F32>' .. year .. '</font></h5><h5><font color=#BBBBBB>' .. studia .. '</font></h5><h5>' .. genres_str .. '</h5>'
 				if director ~= '' and actors ~= '' then
@@ -504,7 +504,7 @@
 				else ses = '. ' .. ses:gsub('%[', ''):gsub('%]', '') end
 				name = title:gsub(' %(.-$', ''):gsub('-', '−')
 				name_rus = name:gsub(' %/.-$', ''):gsub('&apos;', '´'):gsub('&amp;', '&')
-				rezka_poisk = ' <a href = "simpleTVLua:m_simpleTV.Control.PlayAddress(\'#' .. name_rus .. '\')"><img src="https://rezka.cc/assets/images/favicon.ico" height="' .. 24*masshtab .. '" align="top"></a>'
+				rezka_poisk = ' <a href = "simpleTVLua:m_simpleTV.Control.PlayAddress(\'#' .. name_rus .. '\')"><img src="simpleTVImage:./luaScr/user/westSide/icons/Preview.png" height="' .. 36*masshtab .. '" align="top"></a>'
 				name_eng = name:gsub('.-%/ ', ''):gsub('&apos;', '´'):gsub('&amp;', '&')
 				name_rus = name_rus .. ses
 -- Флаги стран
@@ -760,7 +760,7 @@
 							if country and country:match('США') or country and country:match('USA') then tmp_country_ID = 'us' country_ID = get_country_flags(tmp_country_ID) .. country_ID end
 --конец блока флаги стран
 				desc1 = '<h5>' .. country_ID .. ' ' .. country .. ' <font color=#CD7F32>' .. year .. '</font></h5><h5><font color=#BBBBBB>' .. studia .. '</font></h5><h5>' .. genres_str .. '</h5><h5><font color=#CD7F32>' .. alltime .. '</font></h5>'
-				desc_logo = logo_z:gsub('/cover_mini/', '/'):gsub('.jpg', '-0.jpg'):gsub('%?.-$', '')
+				desc_logo = logo_z:gsub('/cover_mini/', '/'):gsub('.webp', '-0.webp'):gsub('%?.-$', '')
 					if not name or not adr then break end
 				t[i] = {}
 				t[i].address = url1 .. '/' .. adr
