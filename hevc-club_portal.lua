@@ -760,7 +760,7 @@
 							if country and country:match('США') or country and country:match('USA') then tmp_country_ID = 'us' country_ID = get_country_flags(tmp_country_ID) .. country_ID end
 --конец блока флаги стран
 				desc1 = '<h5>' .. country_ID .. ' ' .. country .. ' <font color=#CD7F32>' .. year .. '</font></h5><h5><font color=#BBBBBB>' .. studia .. '</font></h5><h5>' .. genres_str .. '</h5><h5><font color=#CD7F32>' .. alltime .. '</font></h5>'
-				desc_logo = logo_z:gsub('/cover_mini/', '/'):gsub('.webp', '-0.webp'):gsub('%?.-$', '')
+				desc_logo = logo_z:gsub('/cover_mini/', '/'):gsub('%.jpg.-$', '-0.jpg')
 					if not name or not adr then break end
 				t[i] = {}
 				t[i].address = url1 .. '/' .. adr
@@ -795,7 +795,7 @@
 	logo_top = w1:match('<img src="(.-)"')
 	if not adr_top or not logo_top then return end
 	adr_top = url1 .. adr_top
-	logo_top = url1 .. logo_top
+	logo_top = url1 .. logo_top:gsub('/top/', '/'):gsub('%.jpg.-$', '-0.jpg')
 	if k >= 1 and k <= 5 then
 	desc_top1 = desc_top1 .. '<td style="padding: 0px 10px 5px;"><a href = "simpleTVLua:m_simpleTV.Control.PlayAddress(\'' .. adr_top ..
 	'\')"><img src="' .. logo_top .. '" height = "' .. 250*masshtab .. '" width = "' .. 166*masshtab .. '"></a></td>' end

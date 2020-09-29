@@ -825,6 +825,7 @@
 				local name = w:match('title="([^"]+)')
 				local Adr = w:match('data%-translator_id="([^"]+)')
 					if not name or not Adr then break end
+				if w:match('data%-translator_id="(.-)"') == '376' then name = name .. ' (ukr)' end
 				t[i] = {}
 				t[i].Id = i
 				t[i].Name = name
@@ -884,7 +885,7 @@
 								, tr
 								, season_id
 								, episode_id)
-					t[i].InfoPanelDesc = '<html><body bgcolor="#434750" style="background-image: url(simpleTVImage:./luaScr/user/westSide/icons/BG01_1080p.png);"><table width="99%"><tr><td style="padding: 10px 10px 5px;"><img src="' .. poster ..
+					t[i].InfoPanelDesc = '<html><body bgcolor="#434750" ' .. background1 .. '><table width="99%"><tr><td style="padding: 10px 10px 5px;"><img src="' .. poster ..
 					'" width="' .. masshtab*300 .. '"></td><td style="padding: 0px 5px 10px; color: #EBEBEB; vertical-align: middle;" width="' .. masshtab*266 .. '"><h5><i><font color=#EBEBEB>' .. slogan .. '</font></i>  <b><font color=#CD7F32>' .. mpaa .. '</font></b></h5><h4><font color=#00FA9A>' .. name_rus .. '</font></h4><h4>' .. str_poisk .. '</h4><h5><font color=#BBBBBB>' .. name_eng ..
 					'<h5>' .. country_ID .. ' ' .. countryr .. ' <font color=#CD7F32>' .. year .. '</font></h5><h5><font color=#BBBBBB>' .. genres_str .. '</font></h5>' .. reting .. time_all .. '</td>' .. desc_top ..
 					'</tr></table>' .. table_person .. table_sp .. frn_str .. table_desc .. '<table width="99%"><tr>' .. desc1 .. '</tr></table><table width="99%"><tr>' .. desc2 .. '</tr></table>' .. descs .. '</tr></table>' .. wink_str .. '</tr></table>' .. page_str .. '</html>'
@@ -979,7 +980,7 @@
 		t[1].InfoPanelName = title
 		t[1].InfoPanelShowTime = 60000
 		t[1].InfoPanelLogo = logo or poster
-		t[1].InfoPanelDesc = '<html><body bgcolor="#434750" style="background-image: url(simpleTVImage:./luaScr/user/westSide/icons/BG01_1080p.png);">' .. portal_str .. '<table width="99%"><tr><td style="padding: 10px 10px 5px;"><center><img src="' .. poster ..
+		t[1].InfoPanelDesc = '<html><body bgcolor="#434750" ' .. background1 .. '>' .. portal_str .. '<table width="99%"><tr><td style="padding: 10px 10px 5px;"><center><img src="' .. poster ..
 		'" width="' .. masshtab*300 .. '"></td><td style="padding: 0px 5px 10px; color: #EBEBEB; vertical-align: middle;" width="' .. masshtab*266 .. '"><h5><i><font color=#EBEBEB>' .. slogan .. '</font></i>  <b><font color=#CD7F32>' .. mpaa .. '</font></b></h5><h4><font color=#00FA9A>' .. name_rus .. '</font></h4><h4>' .. str_poisk .. '</h4><h5><font color=#BBBBBB>' .. name_eng ..
 		'<h5>' .. country_ID .. ' ' .. countryr .. ' <font color=#CD7F32>' .. year .. '</font></h5><h5><font color=#BBBBBB>' .. genres_str .. '</font></h5>' .. reting .. time_all .. '</td>' .. desc_top ..
 		'</tr></table>' .. table_person .. table_sp .. frn_str .. table_desc .. '<table width="99%"><tr>' .. desc1 .. '</tr></table><table width="99%"><tr>' .. desc2 .. '</tr></table>' .. desck .. '</tr></table>' .. descs .. '</tr></table>' .. wink_str .. page_str .. '</html>'
