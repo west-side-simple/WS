@@ -1,4 +1,4 @@
--- видеоскрипт для сайта http://www.lostfilm.tv (27/09/20)
+-- видеоскрипт для сайта http://www.lostfilm.tv (08/10/20) v.2
 -- авторы nexterr, west_side
 -- необходим: Acestream
 -- логин, пароль установить в 'Password Manager', для id - lostfilm
@@ -20,6 +20,7 @@ local prx = ''
 	local titul_rezka_tor = '<a href = "simpleTVLua:m_simpleTV.Control.PlayAddress(\'https://rezka.cc\/\')"><img src="https://rezka.cc/apple-touch-icon.png" height="' .. 36*masshtab .. '" align="top"></a>'
 	local titul_lostfilm = '<a href = "simpleTVLua:m_simpleTV.Control.PlayAddress(\'https://www.lostfilm.tv/new\/\')"><img src="https://www.lostfilm.tv/favicon.ico" height="' .. 36*masshtab .. '" align="top"></a>'
 	local titul_yt = '<a href = "simpleTVLua:m_simpleTV.Control.PlayAddress(\'https://www.youtube.com/feed/channels\')"><img src="simpleTVImage:./luaScr/user/westSide/icons/menuYT.png" height="' .. 36*masshtab .. '" align="top"></a>'
+	local titul_wink = '<a href = "simpleTVLua:m_simpleTV.Control.PlayAddress(\'https://wink.rt.ru/tv\')"><img src="simpleTVImage:./luaScr/user/westSide/icons/menuWINK.png" height="' .. 36*masshtab .. '" align="top"></a>'
 	local titul_lostfilm1 = '<a href = "simpleTVLua:m_simpleTV.Control.PlayAddress(\'https://www.lostfilm.tv/series/?type=search&s=1&t=1&o=0\')"><center><img src="simpleTVImage:./luaScr/user/westSide/icons/New.png" height="' .. 60*masshtab .. '"></a>'
 	local titul_lostfilm2 = '<a href = "simpleTVLua:m_simpleTV.Control.PlayAddress(\'https://www.lostfilm.tv/series/?type=search&s=1&t=2&o=0\')"><center><img src="simpleTVImage:./luaScr/user/westSide/icons/Serial_OnAir.png" height="' .. 60*masshtab .. '"></a>'
 	local titul_lostfilm3 = '<a href = "simpleTVLua:m_simpleTV.Control.PlayAddress(\'https://www.lostfilm.tv/series/?type=search&s=1&t=5&o=0\')"><center><img src="simpleTVImage:./luaScr/user/westSide/icons/Serial_End.png" height="' .. 60*masshtab .. '"></a>'
@@ -45,6 +46,23 @@ local prx = ''
 		else
 			background2 = ''
 		end
+	if Weather then
+		local pogoda = Weather.api.GetCurTemp()
+		if type(pogoda)=="table" then
+			m_simpleTV.OSD.ShowMessage_UTF8( pogoda.cur_temp .. pogoda.letter .. '\n' .. pogoda.cur_icon)
+			pogoda_cur_temp = pogoda.cur_temp
+			pogoda_letter = pogoda.letter
+			pogoda_cur_icon = pogoda.cur_icon
+			pogoda_str = '<td width="' .. 160*masshtab .. '" style="padding: 10px 10px 5px; vertical-align: middle; color: #EBEBEB;"><h3><img src="' .. pogoda_cur_icon .. '" height="' .. 36*masshtab .. '" align="top">' ..	pogoda_cur_temp .. pogoda_letter .. '</h3></td>'
+		else m_simpleTV.OSD.ShowMessage_UTF8("NULL")
+			pogoda_str = ''		
+		end
+	else m_simpleTV.OSD.ShowMessage_UTF8("дополнение ПОГОДА не установлено")
+			pogoda_str = ''	
+	end
+	portal_str = '<table width="99\%"><tr><td style="padding: 10px 10px 5px; vertical-align: middle;"><h3><center>' ..
+	titul_rezka_tor .. titul_hevc .. titul_lostfilm ..' <font color=#CD7F32><b>' .. data .. ' </b></font>' .. titul_yt .. titul_rezka .. titul_wink .. 
+	'</h3></td>' .. pogoda_str .. '</tr></table><hr>'	
 -- '' - нет
 --  'https://proxy-nossl.antizapret.prostovpn.org:29976' (пример)
 -- ##
@@ -106,7 +124,7 @@ local prx = ''
 	end
 	local session = m_simpleTV.Http.New('Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3729.108 Safari/537.36', prx, false)
 		if not session then return end
-	m_simpleTV.Http.SetTimeout(session, 12000)
+	m_simpleTV.Http.SetTimeout(session, 16000)
 	local function trim(str)
 		str = string.match(str,'^%s*(.-)%s*$')
 	 return str
@@ -115,24 +133,97 @@ local prx = ''
 			m_simpleTV.User.lostfilm.Tabletitle = nil
 			m_simpleTV.User.lostfilm.title = nil
 			local rc, answer = m_simpleTV.Http.Request(session, {url = inAdr})
-			m_simpleTV.Http.Close(session)
 				if rc ~= 200 then
 					m_simpleTV.OSD.ShowMessageT({text = 'lostfilm ошибка[0.1]-' .. rc, color = ARGB(255, 255, 0, 0), showTime = 5000, id = 'channelName'})
 				 return
 				end
+		local rc1, answer_obzor = m_simpleTV.Http.Request(session, {url = inAdr:gsub('/video.-$', '')})
+		if rc1 ~= 200 then
+			m_simpleTV.OSD.ShowMessageT({text = 'lostfilm ошибка[0.2]-' .. rc1, color = ARGB(255, 255, 0, 0), showTime = 5000, id = 'channelName'})
+			m_simpleTV.Http.Close(session)
+		 return
+		end
+		local url1 = 'https://www.lostfilm.tv'
+		obzor = answer_obzor:match('itemprop="description">(.-)</div>') or ''
+		obzor = obzor:gsub('href="', ' style="color: #7FD4FF; text-decoration: none;" href="' .. url1)
+		left_box = answer_obzor:match('<div class="left%-box">(.-)</div>') or ''
+		left_box = left_box:gsub('Рейтинг IMDb:.-$', ''):gsub('<br />', ''):gsub('Канал, Страна:', '<br />Канал, Страна:')
+		left_box = left_box:gsub('href="', ' style="color: #7FFFD4; text-decoration: none;" href="simpleTVLua:m_simpleTV.Control.PlayAddress(\'' .. url1):gsub('" title=', '\'\)" title=')
+		right_box1 = answer_obzor:match('<div class="right%-box">(.-</a><br />)') or ''
+		right_box1 = right_box1:gsub('href="', ' style="color: #7FFFD4; text-decoration: none;" href="simpleTVLua:m_simpleTV.Control.PlayAddress(\'' .. url1):gsub('" title=', '\'\)" title=')
+		right_box2 = answer_obzor:match('(Официальный сайт:.-)<br />') or ''
+		right_box2 = right_box2:gsub('href="', ' style="color: #7FD4FF; text-decoration: none;" href="' .. url1)
+				reiting_imdb = answer_obzor:match('Рейтинг IMDb: (.-)<br />') or ''
+				if reiting_imdb ~= '' and not reiting_imdb:match('%-%-') then reiting_imdb = tonumber(reiting_imdb) reiting_imdb_str = '<img src="simpleTVImage:./luaScr/user/westSide/icons/menuIMDb.png" height="' .. 20*masshtab .. '" align="top"><img src="simpleTVImage:./luaScr/user/westSide/stars/'
+				.. reiting_imdb .. '.png" height="' .. 20*masshtab .. '" align="top">'  else reiting_imdb = '' reiting_imdb_str = '' end
+				reiting_lf = answer_obzor:match('<meta itemprop="ratingValue" content="(.-)">') or ''
+				reiting_lf_count = answer_obzor:match('<meta itemprop="ratingCount" content="(.-)">') or ''
+				if reiting_lf ~= '' then reiting_lf_str = '<img src="https://www.lostfilm.tv/favicon.ico" height="' .. 20*masshtab .. '" align="top"><img src="simpleTVImage:./luaScr/user/westSide/stars/'
+				.. reiting_lf .. '.png" height="' .. 20*masshtab .. '" align="top">' reiting_lf = tonumber(reiting_lf) else reiting_lf = '' reiting_lf_str = '' end	
 			local t, i = {}, 1
 			local name = answer:match('<div class="title">(.-)</div>') or 'lostfilm'
 			name = 'Видео: ' .. name
 			m_simpleTV.User.lostfilm.title = name
+		logo_video = answer:match('<h2>Видео.-<img src="(.-)"') or ''
+		if logo_video ~= '' then logo_video = logo_video:gsub('img src="', 'img src="' .. url1) else
+		logo_video = 'https://www.tarablog.net.ua/wp-content/uploads/2014/01/lostfilm1.jpg' end
+			title1 = answer:match('<title>(.-)</title>') or ''
+			title1 = title1:gsub('%: кадры%, фото%, актеры%, персонажи и съемочная группа%, обсуждение эпизода.-$', ''):gsub('%. %- LostFilm%.TV%.', ''):gsub(' %– LostFilm%.TV%.', ''):gsub('Видео, трейлеры, интервью, фичуретки, тизеры, промо%-ролики%.', '')
+			title1 = title1:gsub('%. ', '<p>'):gsub(', ', ' - '):gsub('999 сезон', 'Дополнительные материалы')
+			serial_titul = answer:match('<div class="title%-block">(.-)<div class="clr">')
+		if serial_titul then
+		title_ru = serial_titul:match('<h1 class="title%-ru".->(.-)</h1>') or ''
+		rezka_poisk = ' <a href = "simpleTVLua:m_simpleTV.Control.PlayAddress(\'#' .. title_ru .. '\')"><img src="simpleTVImage:./luaScr/user/westSide/icons/Preview.png" height="' .. 36*masshtab .. '" align="top"></a>'
+		title_en = serial_titul:match('<h2 class="title%-en".->(.-)</h2>') or ''
+		title_status = serial_titul:match('<div class="status">(.-)</span>') or ''
+		title_status = title_status:gsub('Следующая', '<br\> Следующая')
+		for title_ssylki in serial_titul:gmatch('<a.-</a>') do
+		title_ssylki = title_ssylki:gsub('href="', 'href = "simpleTVLua:m_simpleTV.Control.PlayAddress\(\'' .. url1)
+		if title_ssylki:match('>Обзор сериала<') then serial_ssylka = title_ssylki:gsub('" class="item.-"', '\'\)" style="color: #7FFFD4; text-decoration: none;"')
+		elseif title_ssylki:match('>Гид по сериям<') then gid_ssylka = title_ssylki:gsub('" class="item.-"', '\'\)" style="color: #7FFFD4; text-decoration: none;"')
+		elseif title_ssylki:match('>Видео<') then video_ssylka = title_ssylki:gsub('" class="item.-"', '\'\)" style="color: #7FFFD4; text-decoration: none;"') end
+		end
+				local c = answer:match('onClick="FollowSerial%((.-)%)') or ''
+				if c ~= '' then
+				seson_str = '<a href = "simpleTVLua:m_simpleTV.Control.PlayAddress(\'' .. inAdr:gsub('/video.-$', '/seasons/') .. '\')"><center><img src="https://static.lostfilm.tv/Images/' .. c .. '/Posters/poster.jpg" height="' .. 80*masshtab .. '">'
+				else
+				seson_str = '<a href = "simpleTVLua:m_simpleTV.Control.PlayAddress(\'' .. inAdr:gsub('/video.-$', '/seasons/') .. '\')"><center><img src="https://www.tarablog.net.ua/wp-content/uploads/2014/01/lostfilm1.jpg" height="' .. 80*masshtab .. '">'
+				end
+				if c ~= '' then
+				serial_str = '<a href = "simpleTVLua:m_simpleTV.Control.PlayAddress(\'' .. inAdr:gsub('/video.-$', '') .. '\')" style="color: #7FFFD4; text-decoration: none;"><center><img src="https://static.lostfilm.tv/Images/' .. c .. '/Posters/icon.jpg" height="' .. 60*masshtab .. '"><h4>Перейти к сезонам</h4></a>'
+				else
+				serial_str = '<a href = "simpleTVLua:m_simpleTV.Control.PlayAddress(\'' .. inAdr:gsub('/video.-$', '') .. '\')"><center><img src="https://www.tarablog.net.ua/wp-content/uploads/2014/01/lostfilm1.jpg" height="' .. 80*masshtab .. '"><h4>Перейти к сезонам</h4></a>'
+				end
+		poster_str = '<center><img src="https://static.lostfilm.tv/Images/' .. c .. '/Posters/poster.jpg" width="' .. 640*masshtab .. '">'
+		serial_titul = '<table width="99%"><tr><td style="padding: 0px 10px 5px; color: #EBEBEB; vertical-align: middle;">' .. serial_str ..
+		'</td><td style="padding: 0px 10px 5px; color: #EBEBEB; vertical-align: middle;"><h2><font color="#00FA9A">' .. title_ru .. rezka_poisk .. '</h2><h4><font color="#BBBBBB">' .. title_en .. '</font></h4><h5>' .. title_status ..
+		'</h5></td></tr></table><hr>'
+		end
+			local left_str, right_str = '', ''
+			answer_vpage = answer:match('<div class="pagging%-pane">.-<div class="hor%-spacer3">') or ''
+				for wwv in answer_vpage:gmatch('<a.-</a>') do
+				if wwv:match('Предыдущая страница') then
+				left_str = '<a href = "simpleTVLua:m_simpleTV.Control.PlayAddress(\'' .. url1 .. wwv:match('<a href="(.-)">') .. '\')">'
+				end
+				if wwv:match('Следующая страница') then
+				right_str = '<a href = "simpleTVLua:m_simpleTV.Control.PlayAddress(\'' .. url1 .. wwv:match('<a href="(.-)">') .. '\')">'
+				end
+				end
+				if left_str ~= '' then left_str = left_str .. '<center><img src="simpleTVImage:./luaScr/user/westSide/icons/left.png" height="' .. 120*masshtab .. '">'
+				else left_str = '<center><img src="simpleTVImage:./luaScr/user/westSide/icons/left_no.png" height="' .. 120*masshtab .. '">' end
+				if right_str ~= '' then right_str = right_str .. '<center><img src="simpleTVImage:./luaScr/user/westSide/icons/right.png" height="' .. 120*masshtab .. '">'
+				else right_str = '<center><img src="simpleTVImage:./luaScr/user/westSide/icons/right_no.png" height="' .. 120*masshtab .. '">' end
 			local adr, desc, quality
 				for w in answer:gmatch('<div class="video%-block video_block">(.-)<div class="hor') do
 					desc = w:match('<div class="description">(.-)</div>')
 					adr = w:match('data%-src="(.-)"')
+					logo = w:match('<img src="(.-)"')
 						if not adr or not desc then break end
 					t[i] = {}
 					t[i].Id = i
 					desc = desc:gsub('LostFilm%.TV', '')
 					quality = w:match('data%-quality="(.-)"') or ''
+-- max quality
 					if quality:match('480p') then
 						adr = adr:gsub('360p', '480p')
 					end
@@ -142,12 +233,27 @@ local prx = ''
 					if quality:match('1080p') then
 						adr = adr:gsub('720p', '1080p')
 					end
+-- end max quality
+--info
+				t[i].InfoPanelDesc = '<html><body bgcolor="#434750" ' .. background1 .. '><table width="99\%"><tr><td style="padding: 10px 10px 5px; vertical-align: middle;"><h3><center>'
+				.. titul_rezka_tor .. titul_hevc .. titul_yt .. titul_rezka .. titul_lostfilm ..
+				'</h3></td></tr><hr></table>' .. serial_titul .. '<table width="99%"><tr><td width="' .. 64*masshtab .. '" style="padding: 10px 10px 5px; vertical-align: middle;">'
+				.. left_str .. '</td><td style="padding: 10px 10px 5px; vertical-align: middle;">' .. poster_str .. '</td><td width="' .. 64*masshtab .. '" style="padding: 10px 10px 5px; vertical-align: middle;">' .. right_str ..
+				'</td></tr></table><table width="99\%"><tr><td style="padding: 0px 10px 5px; vertical-align: middle; color: #CD7F32;"><h4>' .. left_box .. 
+				'</h4><h4>' .. reiting_imdb_str .. '</h4><h4>' .. reiting_lf_str .. reiting_lf_count .. '</h4></td><td style="padding: 0px 10px 5px; vertical-align: middle; color: #CD7F32;"><h4>' .. right_box1 .. right_box2 ..
+				'</h4></td></tr></table><table width="99\%"><tr><td style="padding: 0px 10px 5px; vertical-align: middle; color: #EBEBEB;"><h5>' .. obzor .. '</h5></td></tr></table></html>'
+				t[i].InfoPanelDesc = t[i].InfoPanelDesc:gsub('"', "\"")
+				t[i].InfoPanelTitle = title
+				t[i].InfoPanelName = title
+				t[i].InfoPanelShowTime = 60000
+				t[i].InfoPanelLogo = 'https:' .. logo
+--
 					t[i].Name = trim(desc)
 					t[i].Adress = adr
 					i = i + 1
 				end
 				if i == 1 then return end
-			if i > 2 then
+			if i >= 2 then
 				t.ExtParams = {FilterType = 2, AutoNumberFormat = '%1. %2'}
 				local _, id = m_simpleTV.OSD.ShowSelect_UTF8(name, 0, t, 5000)
 				if not id then
@@ -165,6 +271,11 @@ local prx = ''
 				m_simpleTV.Control.CurrentTitle_UTF8 = name
 			end
 			m_simpleTV.OSD.ShowMessageT({text = name, color = ARGB(255, 155, 155, 255), showTime = 1000 * 5, id = 'channelName'})
+			if m_simpleTV.Control.MainMode == 0 then
+		m_simpleTV.Interface.SetBackground({BackColor = 0, BackColorEnd = 255, PictFileName = logo_video, TypeBackColor = 0, UseLogo = 3, Once = 1})
+		m_simpleTV.Control.ChangeChannelLogo(logo_video, m_simpleTV.Control.ChannelID, 'CHANGE_IF_NOT_EQUAL')
+		m_simpleTV.Control.ChangeChannelName(name, m_simpleTV.Control.ChannelID, false)
+	end
 		 return
 		end
 	if not m_simpleTV.User.lostfilm.cooki then
@@ -393,9 +504,9 @@ local prx = ''
 				right_str = '<a href = "simpleTVLua:m_simpleTV.Control.PlayAddress(\'' .. host .. ww1:match('<a href="(.-)">') .. '\')">'
 				end
 				end
-				if left_str ~= '' then left_str = left_str .. '<center><img src="simpleTVImage:./luaScr/user/westSide/icons/left.png" height="' .. 120*masshtab .. '">'
+				if left_str ~= '' then left_str = left_str .. '<center><img src="simpleTVImage:./luaScr/user/westSide/icons/left.png" height="' .. 120*masshtab .. '"></a>'
 				else left_str = '<center><img src="simpleTVImage:./luaScr/user/westSide/icons/left_no.png" height="' .. 120*masshtab .. '">' end
-				if right_str ~= '' then right_str = right_str .. '<center><img src="simpleTVImage:./luaScr/user/westSide/icons/right.png" height="' .. 120*masshtab .. '">'
+				if right_str ~= '' then right_str = right_str .. '<center><img src="simpleTVImage:./luaScr/user/westSide/icons/right.png" height="' .. 120*masshtab .. '"></a>'
 				else right_str = '<center><img src="simpleTVImage:./luaScr/user/westSide/icons/right_no.png" height="' .. 120*masshtab .. '">' end
 				newadr = inAdr:gsub('%/season.-$', '') .. '/season_' .. s .. '/episode_' .. e
 				newadr = newadr:gsub('%/%/', '/'):gsub('https:%/', 'https://'):gsub('season_999', 'additional')
@@ -533,15 +644,16 @@ elseif not retAdr:match('&lostfilm') and not inAdr:match('lostfilm%.tv%/new') an
 		title_en = serial_titul:match('<h2 class="title%-en".->(.-)</h2>') or ''
 		title_status = serial_titul:match('<div class="status">(.-)</span>') or ''
 		title_status = title_status:gsub('Следующая', '<br\> Следующая')
+		local serial_ssylka, gid_ssylka, video_ssylka = '', '', ''
 		for title_ssylki in serial_titul:gmatch('<a.-</a>') do
 		title_ssylki = title_ssylki:gsub('href="', 'href = "simpleTVLua:m_simpleTV.Control.PlayAddress\(\'' .. url1)
 		if title_ssylki:match('>Обзор сериала<') then serial_ssylka = title_ssylki:gsub('" class="item.-"', '\'\)" style="color: #7FFFD4; text-decoration: none;"')
 		elseif title_ssylki:match('>Гид по сериям<') then gid_ssylka = title_ssylki:gsub('" class="item.-"', '\'\)" style="color: #7FFFD4; text-decoration: none;"')
-		elseif title_ssylki:match('>Видео<') then video_ssylka = title_ssylki:gsub('" class="item.-"', '\'\)" style="color: #7FFFD4; text-decoration: none;"') end
+		elseif title_ssylki:match('>Видео<') then video_ssylka = title_ssylki:gsub('" class="item.-"', '\'\)" style="color: #7FFFD4; text-decoration: none;"'):gsub('>Видео<', '>Обзор сериала<') end
 		end
-		serial_titul = '<table width="99%"><tr><td style="padding: 0px 10px 5px; color: #EBEBEB; vertical-align: middle;"><center><img src="' .. logo_serial .. '" height="' .. 100*masshtab .. '"><h4><center>' .. serial_ssylka ..
+		serial_titul = '<table width="99%"><tr><td style="padding: 0px 10px 5px; color: #EBEBEB; vertical-align: middle;"><center><img src="' .. logo_serial .. '" height="' .. 100*masshtab .. '"><h4><center>' .. video_ssylka ..
 		'</h4></td><td style="padding: 0px 10px 5px; color: #EBEBEB; vertical-align: middle;"><h2><font color="#00FA9A">' .. title_ru .. rezka_poisk .. '</h2><h4><font color="#BBBBBB">' .. title_en .. '</font></h4><h5>' .. title_status ..
-		'</h5></td><td style="padding: 0px 10px 5px; color: #EBEBEB; vertical-align: middle;"><center><img src="' .. logo_video .. '" height="' .. 100*masshtab .. '"><h4><center>' .. video_ssylka .. '</h4></td></tr></table><hr>'
+		'</h5></td></tr></table><hr>'
 		end
 		local page_str = ''
 		icon_serial = logo_serial:gsub('poster%.jpg', 'image.jpg')
@@ -605,8 +717,7 @@ elseif not retAdr:match('&lostfilm') and not inAdr:match('lostfilm%.tv%/new') an
 		as[1].InfoPanelName = title1:gsub('<p>', ' - ')
 		as[1].InfoPanelShowTime = 60000
 	    as[1].InfoPanelLogo = logo_serial
-		as[1].InfoPanelDesc = '<html><body bgcolor="#434750" ' .. background1 .. '><table width="99%"><tr><td colspan="3" style="padding: 10px 10px 5px; color: #EBEBEB; vertical-align: middle;"><h3><center>' ..
-	titul_rezka_tor .. titul_hevc .. ' <font color=#CD7F32><b>' .. data .. ' </b></font>' .. titul_yt .. titul_rezka .. titul_lostfilm .. '</h3></td></tr><hr></table>' .. serial_titul .. page_str .. '</body></html>'
+		as[1].InfoPanelDesc = '<html><body bgcolor="#434750" ' .. background1 .. '>' .. portal_str .. serial_titul .. page_str .. '</body></html>'
 		as[1].InfoPanelDesc = as[1].InfoPanelDesc:gsub('"', '\"')
 		as[1].InfoPanelTitle = as[1].InfoPanelTitle:gsub('"', '\"')
 
@@ -702,9 +813,8 @@ elseif not retAdr:match('&lostfilm') and not inAdr:match('lostfilm%.tv%/new') an
 	tab[1] = {}
 	tab[1].Id = 1
 	tab[1].Name = title
-	tab[1].InfoPanelDesc = '<html><body bgcolor="#434750" ' .. background1 .. '><table width="99%"><tr><td colspan="3" style="padding: 10px 10px 5px; color: #EBEBEB; vertical-align: middle;"><h3><center>' ..
-	titul_rezka_tor .. titul_hevc .. ' <font color=#CD7F32><b>' .. data .. ' </b></font>' .. titul_yt .. titul_rezka .. titul_lostfilm .. '</h3></td></tr><hr></table>' ..
-	page_str .. '<table width="99%"><tr>' .. top_str .. '</tr></table><table width="99%">' .. ser_new_str .. '</tr></table></html><html>' .. page_str .. '</html>'
+	tab[1].InfoPanelDesc = '<html><body bgcolor="#434750" ' .. background1 .. '>' .. portal_str .. page_str .. 
+	'<table width="99%"><tr>' .. top_str .. '</tr></table><table width="99%">' .. ser_new_str .. '</tr></table></html><html>' .. page_str .. '</html>'
 	tab[1].InfoPanelDesc = tab[1].InfoPanelDesc:gsub('"', "\"")
 	tab[1].InfoPanelTitle = title
 	tab[1].InfoPanelName = title
@@ -817,13 +927,16 @@ elseif inAdr:match('lostfilm%.tv%/series%/%?type') or inAdr:match('lostfilm%.tv%
 	end
 ------------------
 	local tab = {}
-	if inAdr:match('lostfilm%.tv%/search%/%?q=') then top_str = '' page_search_str = '' end
+	if inAdr:match('lostfilm%.tv%/search%/%?q=') then top_str = '' page_search_str = '' 
+	portal_str = '<table width="99\%"><tr><td width="' .. 560*masshtab .. '" style="padding: 10px 10px 5px; vertical-align: middle;"><h3><center>' ..
+	titul_rezka_tor .. titul_hevc .. titul_lostfilm ..' <font color=#CD7F32><b>' .. data .. ' </b></font>' .. titul_yt .. titul_rezka .. titul_wink .. 
+	'</h3></td>' .. pogoda_str .. '</tr></table><hr>'	
+	end
 	tab[1] = {}
 	tab[1].Id = 1
 	tab[1].Name = title
-	tab[1].InfoPanelDesc = '<html><body bgcolor="#434750" ' .. background1 .. '><table width="99%"><tr><td colspan="3" style="padding: 10px 10px 5px; color: #EBEBEB; vertical-align: middle;"><h3><center>' ..
-	titul_rezka_tor .. titul_hevc .. ' <font color=#CD7F32><b>' .. data .. ' </b></font>' .. titul_yt .. titul_rezka .. titul_lostfilm .. '</h3></td></tr><hr></table>' ..
-	page_search_str .. page_str .. '<table width="99%"><tr>' .. top_str .. '</tr></table><table width="99%">' .. serials_str .. '</tr></table></html><html>' .. page_str .. '</html>'
+	tab[1].InfoPanelDesc = '<html><body bgcolor="#434750" ' .. background1 .. '>' .. portal_str .. page_search_str .. page_str .. 
+	'<table width="99%"><tr>' .. top_str .. '</tr></table><table width="99%">' .. serials_str .. '</tr></table></html><html>' .. page_str .. '</html>'
 	tab[1].InfoPanelDesc = tab[1].InfoPanelDesc:gsub('"', "\"")
 	tab[1].InfoPanelTitle = title
 	tab[1].InfoPanelName = title

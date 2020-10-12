@@ -38,11 +38,11 @@ function showTestWestSide(channelId)
   end
 --	else return
  end
- 
+
   if t[1].EpgId1~='' and  t[1].EpgId1~='noepg' then
 
 	local curTime = os.date('%Y-%m-%d %X')
-	
+
 	local sql1 = 'SELECT * FROM ChProg WHERE IdChannel=="' .. t[1].EpgId .. '"'
               .. ' AND StartPr > "' .. curTime .. '"'
   --debug_in_file(sql1)
@@ -51,7 +51,7 @@ function showTestWestSide(channelId)
   if  epgT1~=nil and epgT1[1]~=nil
    then
    epgTitle1 = epgT1[1].Title
-   epgDesc1  = epgT1[1].Desc   
+   epgDesc1  = epgT1[1].Desc
   end
 --	else return
 	end
@@ -76,13 +76,28 @@ function showTestWestSide(channelId)
 		local titul_rezka_tor = '<a href = "simpleTVLua:m_simpleTV.Control.PlayAddress(\'https://rezka.cc\/\')"><img src="https://rezka.cc/apple-touch-icon.png" height="' .. 36*masshtab .. '" align="top"></a>'
 		local titul_lostfilm = '<a href = "simpleTVLua:m_simpleTV.Control.PlayAddress(\'https://www.lostfilm.tv/new\/\')"><img src="https://www.lostfilm.tv/favicon.ico" height="' .. 36*masshtab .. '" align="top"></a>'
 		local titul_yt = '<a href = "simpleTVLua:m_simpleTV.Control.PlayAddress(\'https://www.youtube.com/feed/channels\')"><img src="simpleTVImage:./luaScr/user/westSide/icons/menuYT.png" height="' .. 36*masshtab .. '" align="top"></a>'
+		local titul_wink = '<a href = "simpleTVLua:m_simpleTV.Control.PlayAddress(\'##\')"><img src="simpleTVImage:./luaScr/user/westSide/icons/menuWINK.png" height="' .. 36*masshtab .. '" align="top"></a>'
 	dataEN = os.date ("%a %d %b %Y %H:%M")
 	dataRU = dataEN:gsub('Sun', 'Вс'):gsub('Mon', 'Пн'):gsub('Tue', 'Вт'):gsub('Wed', 'Ср'):gsub('Thu', 'Чт'):gsub('Fri', 'Пт'):gsub('Sat', 'Сб')
 	dataRU = dataRU:gsub('Jan', 'Янв'):gsub('Feb', 'Фев'):gsub('Mar', 'Мар'):gsub('Apr', 'Апр'):gsub('May', 'Май'):gsub('Jun', 'Июн'):gsub('Jul', 'Июл'):gsub('Aug', 'Авг'):gsub('Sep', 'Сен'):gsub('Oct', 'Окт'):gsub('Nov', 'Ноя'):gsub('Dec', 'Дек')
 	if m_simpleTV.Interface.GetLanguage() == 'ru' then data = dataRU else data = dataEn end
+	if Weather then
+		local pogoda = Weather.api.GetCurTemp()
+		if type(pogoda)=="table" then
+			m_simpleTV.OSD.ShowMessage_UTF8( pogoda.cur_temp .. pogoda.letter .. '\n' .. pogoda.cur_icon)
+			pogoda_cur_temp = pogoda.cur_temp
+			pogoda_letter = pogoda.letter
+			pogoda_cur_icon = pogoda.cur_icon
+			pogoda_str = '<td width="' .. 160*masshtab .. '" style="padding: 10px 10px 5px; vertical-align: middle; color: #EBEBEB;"><h3><img src="' .. pogoda_cur_icon .. '" height="' .. 36*masshtab .. '" align="top">' ..	pogoda_cur_temp .. pogoda_letter .. '</h3></td>'
+		else m_simpleTV.OSD.ShowMessage_UTF8("NULL")
+			pogoda_str = ''
+		end
+	else m_simpleTV.OSD.ShowMessage_UTF8("дополнение ПОГОДА не установлено")
+			pogoda_str = ''
+	end
 	portal_str = '<table width="99\%"><tr><td style="padding: 10px 10px 5px; vertical-align: middle;"><h3><center>' ..
-	titul_rezka_tor .. titul_hevc .. ' <font color=#CD7F32><b>' .. data .. ' </b></font>' .. titul_yt .. titul_rezka .. titul_lostfilm .. '</h3></td></tr><hr></table>'
-
+	titul_rezka_tor .. titul_hevc .. titul_lostfilm ..' <font color=#CD7F32><b>' .. data .. ' </b></font>' .. titul_yt .. titul_rezka .. titul_wink ..
+	'</h3></td>' .. pogoda_str .. '</tr></table><hr>'
  if StartFor and EndFor then
  StartForN = StartFor:gsub('.- ', '')
  StartForH = StartForN:match('(.-):')
@@ -128,7 +143,7 @@ function showTestWestSide(channelId)
 		local function PlayYT(title)
 		local w1 = clean_title(title)
 			return ' <a href = "simpleTVLua:m_simpleTV.Control.PlayAddress(\'-' .. w1 .. '\')"><img src="simpleTVImage:./luaScr/user/westSide/icons/menuYT.png" height="' .. 36*masshtab .. '" align="top"></a>'
-		end	
+		end
  local str = '<html><body bgcolor="#434750" ' .. background2 .. '>' .. portal_str .. '<table width="99%"><tr><td style="padding: 10px 10px 0px; color: #EBEBEB;"><img style="float:right;" src="' .. logo .. '" height="' .. 150*masshtab .. '">'
         .. '<h3><font color="#00FF7F">' .. t[1].Name .. '</font></h3>'
  if epgTitle then

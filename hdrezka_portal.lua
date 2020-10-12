@@ -1,4 +1,4 @@
--- видеоскрипт для сайта https://rezka.ag (27/09/20) v.2.4
+-- видеоскрипт для сайта https://rezka.ag (08/10/20) v.2.5
 -- ветка на bugtracker http://iptv.gen12.net/bugtracker/view.php?id=1596
 -- авторы nexterr, west_side
 -- открывает подобные ссылки:
@@ -219,22 +219,11 @@
 			end
 	 return s
 	end
-	local zapros_wink_title, i_id, wink_id = '', '', ''
-	if inAdr:match('^#') then
-	inAdr = inAdr:gsub('^#', ''):gsub('%+', '%%2B')
-	zapros_wink_title = inAdr
-	if inAdr:match('^#') then
-	zapros_wink_title = inAdr:gsub('^#', ''):gsub('%+', '%%2B')
-	if zapros_wink_title:match('%&id=') then
-	wink_id = zapros_wink_title:gsub('^.-%&id=', '')
-	end
-	zapros_wink_title = zapros_wink_title:gsub('%&id=.-$', '')
-	m_simpleTV.OSD.ShowMessageT({text = m_simpleTV.Common.multiByteToUTF8(zapros_wink_title) .. ' | ' .. wink_id, color = 0xff9999ff, showTime = 1000 * 5})
-	end
-	if wink_id == '' then inAdr = m_simpleTV.Common.multiByteToUTF8(inAdr)
---	inAdr = xren(inAdr)
-	inAdr = 'https://rezka.ag/index.php?do=search&subaction=search&q=' .. inAdr
-	else inAdr = 'https://rezka.ag/index.php?do=search&subaction=search&q=' .. m_simpleTV.Common.multiByteToUTF8(zapros_wink_title) end
+	if inAdr:match('^#')
+		then
+			inAdr = inAdr:gsub('^#', ''):gsub('%+', '%%2B')
+			inAdr = m_simpleTV.Common.multiByteToUTF8(inAdr)
+			inAdr = 'https://rezka.ag/index.php?do=search&subaction=search&q=' .. inAdr
 	end
 	local function play(retAdr, title)
 		if retAdr:match('^$rezka') then
@@ -662,162 +651,6 @@
 		m_simpleTV.Control.ChangeChannelName(title, m_simpleTV.Control.ChannelID, false)
 	end
 	m_simpleTV.Control.SetTitle(title)
-
-------------------блок wink
-	local adr_zapros_wink = decode64('aHR0cHM6Ly9pdHYucnQucnUvYXBpL3YxL3NlYXJjaC9hdXRvc3VnZ2VzdD9xPQ==')
-	if zapros_wink_title ~= '' then
-	zapros_wink0 = zapros_wink_title:gsub('%+', '%%2B')
-	zapros_wink0 = m_simpleTV.Common.multiByteToUTF8(zapros_wink0)
-	else
-	zapros_wink0 = name_rus:gsub('%+', '%%2B') end
---	zapros_wink0 = xren(zapros_wink0)
-	if inAdr:match('%/person%/')
-	or inAdr:match('%/franchises%/')
-	or inAdr:match('%/collections%/')
-	or not inAdr:match('%/(%d+)') then
-	zapros_wink0 = ''
-	end
-	if zapros_wink_title ~= '' then
-	zapros_wink0 = zapros_wink_title:gsub('%+', '%%2B')
-	zapros_wink0 = m_simpleTV.Common.multiByteToUTF8(zapros_wink0)
-	end
-	zapros_wink = adr_zapros_wink .. zapros_wink0
-	local rc, answer_wink = m_simpleTV.Http.Request(session, {url = zapros_wink})
-		if rc ~= 200 then
-			showError('Wink')
-			m_simpleTV.Http.Close(session)
-		 return
-		end
-	require 'json'
-	answer_wink = answer_wink:gsub('%[%]', '""')
-	answer_wink = answer_wink:gsub('null', '""')
-	local tabw = json.decode(answer_wink)
-	if not tabw or not tabw.content then return end
-		local tw, jw, jkw, x_wink, y_wink, z_wink, inw, country, iscontentw, rating_strw = {}, 1, 1, '0', '0', '0', '0', '', '', ''
-		while true do
-		if not tabw.content[jw] then break end
-		tw[jw] = {}
-			tw[jw].Id = tabw.content[jw].id
-			tw[jw].namew = tabw.content[jw].name
-			tw[jw].adrw =  '##' .. tw[jw].namew .. '&id=' .. tw[jw].Id
-			tw[jw].yearw = tabw.content[jw].year or ''
-			tw[jw].posterw = tabw.content[jw].poster or ''
-				if tw[jw].posterw and tw[jw].posterw ~= '' then tw[jw].posterw = 'http://sdp.svc.iptv.rt.ru:8080/images/' .. tw[jw].posterw else tw[jw].posterw = 'https://wink.rt.ru/apple-touch-icon.png' end
-			tw[jw].logow = tabw.content[jw].screenshot or ''
-				if tw[jw].logow and tw[jw].logow ~= '' then tw[jw].logow = 'http://sdp.svc.iptv.rt.ru:8080/images/' .. tw[jw].logow else logow = 'https://wink.rt.ru/apple-touch-icon.png' end
-			tw[jw].countryw = tabw.content[jw].country or ''
-			countryw = tw[jw].countryw
-			tw[jw].mpaa = tabw.content[jw].age_level or ''
-			tw[jw].rating_w = tabw.content[jw].rating or ''
-			tw[jw].rating_imdb_w = tabw.content[jw].rating_imdb or ''
-			tw[jw].rating_kinopoisk_w = tabw.content[jw].rating_kinopoisk or ''
-			tw[jw].rating_middle_w = tabw.content[jw].rating_middle or ''
-			tw[jw].director_w = tabw.content[jw].director or ''
-			tw[jw].actors_w = tabw.content[jw].actors or ''
-			tw[jw].age_level_w = tabw.content[jw].age_level or ''
-			tw[jw].type_w = tabw.content[jw].type or ''
-			tw[jw].kind_w = tabw.content[jw].kind or ''
-				if tw[jw].kind_w and tw[jw].kind_w == 'film' then iscontentw = '🎥 '
-				elseif tw[jw].kind_w and tw[jw].kind_w == 'serial' then iscontentw = '📺 '
-				elseif tw[jw].kind_w and tw[jw].kind_w == 'cartoon' then iscontentw = '🐶 '
-				end
-			tw[jw].iscontentw = iscontentw
-			if tabw.content[jw].genres and tabw.content[jw].genres[1]
-			then tw[jw].genres_w = tabw.content[jw].genres[1].name:gsub('%/', ', ')
-			else tw[jw].genres_w = ''
-			end
-				if tw[jw].rating_middle_w ~= '' then
-				rating_strw = string.format('%.' .. (1 or 0) .. 'f', tw[jw].rating_middle_w)
-				rating_strw = '<h5><img src="simpleTVImage:./luaScr/user/westSide/icons/menuWINK.png" height="' .. masshtab*24 .. '" align="top"><img src="simpleTVImage:./luaScr/user/westSide/stars/' .. rating_strw .. '.png" height="' .. masshtab*24 .. '" align="top"></h5>'
-				else rating_strw = ''
-				end
-			tw[jw].rating_strw = rating_strw
-            local function get_country_flags(country_ID)
-				country_flag = '<img src="simpleTVImage:./luaScr/user/westSide/country/' .. country_ID .. '.png" height="' .. masshtab*36 .. '" align="top">'
-				return country_flag:gsub('"', "'")
-			end
-			local tmp_country_ID, country_ID = '', ''
-				if countryw and countryw:match('СССР') then tmp_country_ID = 'ussr' country_ID = get_country_flags(tmp_country_ID) .. country_ID end
-				if countryw and countryw:match('Аргентина') then tmp_country_ID = 'ar' country_ID = get_country_flags(tmp_country_ID) .. country_ID end
-				if countryw and countryw:match('Австрия') then tmp_country_ID = 'at' country_ID = get_country_flags(tmp_country_ID) .. country_ID end
-				if countryw and countryw:match('Австралия') then tmp_country_ID = 'au' country_ID = get_country_flags(tmp_country_ID) .. country_ID end
-				if countryw and countryw:match('Бельгия') then tmp_country_ID = 'be' country_ID = get_country_flags(tmp_country_ID) .. country_ID end
-				if countryw and countryw:match('Бразилия') then tmp_country_ID = 'br' country_ID = get_country_flags(tmp_country_ID) .. country_ID end
-				if countryw and countryw:match('Канада') then tmp_country_ID = 'ca' country_ID = get_country_flags(tmp_country_ID) .. country_ID end
-				if countryw and countryw:match('Швейцария') then tmp_country_ID = 'ch' country_ID = get_country_flags(tmp_country_ID) .. country_ID end
-				if countryw and countryw:match('Китай') then tmp_country_ID = 'cn' country_ID = get_country_flags(tmp_country_ID) .. country_ID end
-				if countryw and countryw:match('Гонконг') then tmp_country_ID = 'hk' country_ID = get_country_flags(tmp_country_ID) .. country_ID end
-				if countryw and countryw:match('Германия') then tmp_country_ID = 'de' country_ID = get_country_flags(tmp_country_ID) .. country_ID end
-				if countryw and countryw:match('Дания') then tmp_country_ID = 'dk' country_ID = get_country_flags(tmp_country_ID) .. country_ID end
-				if countryw and countryw:match('Испания') then tmp_country_ID = 'es' country_ID = get_country_flags(tmp_country_ID) .. country_ID end
-				if countryw and countryw:match('Финляндия') then tmp_country_ID = 'fi' country_ID = get_country_flags(tmp_country_ID) .. country_ID end
-				if countryw and countryw:match('Франция') then tmp_country_ID = 'fr' country_ID = get_country_flags(tmp_country_ID) .. country_ID end
-				if countryw and countryw:match('Великобритания') then tmp_country_ID = 'gb' country_ID = get_country_flags(tmp_country_ID) .. country_ID end
-				if countryw and countryw:match('Греция') then tmp_country_ID = 'gr' country_ID = get_country_flags(tmp_country_ID) .. country_ID end
-				if countryw and countryw:match('Ирландия') then tmp_country_ID = 'ie' country_ID = get_country_flags(tmp_country_ID) .. country_ID end
-				if countryw and countryw:match('Израиль') then tmp_country_ID = 'il' country_ID = get_country_flags(tmp_country_ID) .. country_ID end
-				if countryw and countryw:match('Индия') then tmp_country_ID = 'in' country_ID = get_country_flags(tmp_country_ID) .. country_ID end
-				if countryw and countryw:match('Исландия') then tmp_country_ID = 'is' country_ID = get_country_flags(tmp_country_ID) .. country_ID end
-				if countryw and countryw:match('Италия') then tmp_country_ID = 'it' country_ID = get_country_flags(tmp_country_ID) .. country_ID end
-				if countryw and countryw:match('Япония') then tmp_country_ID = 'jp' country_ID = get_country_flags(tmp_country_ID) .. country_ID end
-				if countryw and countryw:match('Южная Корея') or countryw and countryw:match('Корея Южная') then tmp_country_ID = 'kr' country_ID = get_country_flags(tmp_country_ID) .. country_ID end
-				if countryw and countryw:match('Мексика') then tmp_country_ID = 'mx' country_ID = get_country_flags(tmp_country_ID) .. country_ID end
-				if countryw and countryw:match('Нидерланды') then tmp_country_ID = 'nl' country_ID = get_country_flags(tmp_country_ID) .. country_ID end
-				if countryw and countryw:match('Норвегия') then tmp_country_ID = 'no' country_ID = get_country_flags(tmp_country_ID) .. country_ID end
-				if countryw and countryw:match('Польша') then tmp_country_ID = 'pl' country_ID = get_country_flags(tmp_country_ID) .. country_ID end
-				if countryw and countryw:match('Венгрия') then tmp_country_ID = 'hu' country_ID = get_country_flags(tmp_country_ID) .. country_ID end
-				if countryw and countryw:match('Новая Зеландия') then tmp_country_ID = 'nz' country_ID = get_country_flags(tmp_country_ID) .. country_ID end
-				if countryw and countryw:match('Португалия') then tmp_country_ID = 'pt' country_ID = get_country_flags(tmp_country_ID) .. country_ID end
-				if countryw and countryw:match('Румыния') then tmp_country_ID = 'ro' country_ID = get_country_flags(tmp_country_ID) .. country_ID end
-				if countryw and countryw:match('ЮАР') then tmp_country_ID = 'rs' country_ID = get_country_flags(tmp_country_ID) .. country_ID end
-				if countryw and countryw:match('Россия') then tmp_country_ID = 'ru' country_ID = get_country_flags(tmp_country_ID) .. country_ID end
-				if countryw and countryw:match('Швеция') then tmp_country_ID = 'se' country_ID = get_country_flags(tmp_country_ID) .. country_ID end
-				if countryw and countryw:match('Турция') then tmp_country_ID = 'tr' country_ID = get_country_flags(tmp_country_ID) .. country_ID end
-				if countryw and countryw:match('Украина') then tmp_country_ID = 'ua' country_ID = get_country_flags(tmp_country_ID) .. country_ID end
-				if countryw and countryw:match('США') then tmp_country_ID = 'us' country_ID = get_country_flags(tmp_country_ID) .. country_ID end
-			tw[jw].country_ID = country_ID
-				if xren(tw[jw].namew:gsub(':', ''):gsub('%.', ''):gsub(' HD', ''):gsub('и', 'i'):gsub('И', 'I'):gsub('ё', 'е'):gsub('Ё', 'Е'):gsub('%+', '%%2B')):gsub(' %(.-$', '') == xren(zapros_wink0:gsub(':', ''):gsub('%.', ''):gsub('и', 'i'):gsub('И', 'I'):gsub('ё', 'е'):gsub('Ё', 'Е'):gsub('%+', '%%2B')) or
-					tw[jw].namew:gsub(':', ''):gsub('%.', ''):gsub(' HD', ''):gsub(' %(.-$', ''):gsub('и', 'i'):gsub('И', 'I'):gsub('ё', 'е'):gsub('Ё', 'Е'):gsub('%+', '%%2B') == zapros_wink0:gsub(':', ''):gsub('%.', ''):gsub('и', 'i'):gsub('И', 'I'):gsub('ё', 'е'):gsub('Ё', 'Е'):gsub('%+', '%%2B')
-				then x_wink = '1' else x_wink = '0' end
-				year_tmp = year:gsub('%- %.%.%.', ''):gsub('%-.-$', '')
-				if tw[jw].yearw and year_tmp and tw[jw].yearw == year_tmp then
-				y_wink = '1' else y_wink = '0' end
-				if tw[jw].yearw and year_tmp and tw[jw].yearw ~= '' and year  ~= '' and math.abs(tonumber(tw[jw].yearw) - tonumber(year_tmp)) == 1
-				then z_wink = '1' else z_wink = '0' end
-				if x_wink == '1' and y_wink == '1' and z_wink == '0' then inw = '10' logo = tw[jw].logow end
-				if x_wink == '1' and y_wink == '0' and z_wink == '1' then inw = '8' logo = tw[jw].logow end
-				if x_wink == '1' and y_wink == '0' and z_wink == '0' then inw = '6' end
-				if inw == nill or inw == '' then inw = '0' end
-				tw[jw].inw = inw or '0'
-		jw = jw + 1
-		end
-		table.sort(tw, function(a, b) return a.genres_w > b.genres_w end)
-		local hash, tw1 = {}, {}
-			for i = 1, #tw do
-				if not hash[tw[i].namew]
-				then
-					tw1[#tw1 + 1] = tw[i]
-					hash[tw[i].namew] = true
-				end
-			end
-		table.sort(tw1, function(a, b) return a.namew < b.namew end)
---		table.sort(tw1, function(c, d) return c.inw > d.inw end)
-	wink_str = '<table width="99%"><tr><td style="color: #C5D0E6"><center><h3>Запрос WINK: <font color=#CD7F32>' ..
-	zapros_wink0:gsub('%%2B', '+') .. '</font><br> индекс совпадения: <font color=#CD7F32>' .. inw .. '</font></h3></td></tr></table><table width="99%"><tr>'
-			for i = 1, #tw1 do
-			if jkw == 5 then
-				jkw = 1 wink_str = wink_str .. '</tr></table><table width="99%"><tr>'
-			end
-				wink_str = wink_str .. '<td style="padding: 10px 10px 10px; color: #EBEBEB;"><a href = "simpleTVLua:m_simpleTV.Control.PlayAddress(\'' .. tw1[i].adrw ..
-				'\')"><center><img src="' .. tw1[i].posterw .. '" height = "' .. masshtab*320 .. '" width = "' .. masshtab*214 .. '"></a><center>' .. tw1[i].rating_strw .. '<h5><font color=#00FA9A>' .. tw1[i].iscontentw .. tw1[i].namew ..
-				'</font></h5><h5><font color=#CD7F32>' .. tw1[i].yearw .. ' </font>'.. tw1[i].country_ID .. ' <font color=#BBBBBB>' .. tw1[i].genres_w ..'</h5></td>'
-				jkw = jkw + 1
-				if tw1[i].Id == wink_id then i_id = i end
-			end
---			if zapros_wink0 ~= '' then
---	m_simpleTV.OSD.ShowMessageT({text = 'Запрос WINK: ' .. zapros_wink0:gsub('%%2B', '+') .. ', индекс совпадения - ' .. inw, showTime = 30000, color = 0xffff1000})
---			end
-------------------конец блока WINK
 	local tr = answer:match('<ul id="translators%-list".-</ul>')
 	if tr then
 		local t, i = {}, 1
@@ -888,7 +721,7 @@
 					t[i].InfoPanelDesc = '<html><body bgcolor="#434750" ' .. background1 .. '><table width="99%"><tr><td style="padding: 10px 10px 5px;"><img src="' .. poster ..
 					'" width="' .. masshtab*300 .. '"></td><td style="padding: 0px 5px 10px; color: #EBEBEB; vertical-align: middle;" width="' .. masshtab*266 .. '"><h5><i><font color=#EBEBEB>' .. slogan .. '</font></i>  <b><font color=#CD7F32>' .. mpaa .. '</font></b></h5><h4><font color=#00FA9A>' .. name_rus .. '</font></h4><h4>' .. str_poisk .. '</h4><h5><font color=#BBBBBB>' .. name_eng ..
 					'<h5>' .. country_ID .. ' ' .. countryr .. ' <font color=#CD7F32>' .. year .. '</font></h5><h5><font color=#BBBBBB>' .. genres_str .. '</font></h5>' .. reting .. time_all .. '</td>' .. desc_top ..
-					'</tr></table>' .. table_person .. table_sp .. frn_str .. table_desc .. '<table width="99%"><tr>' .. desc1 .. '</tr></table><table width="99%"><tr>' .. desc2 .. '</tr></table>' .. descs .. '</tr></table>' .. wink_str .. '</tr></table>' .. page_str .. '</html>'
+					'</tr></table>' .. table_person .. table_sp .. frn_str .. table_desc .. '<table width="99%"><tr>' .. desc1 .. '</tr></table><table width="99%"><tr>' .. desc2 .. '</tr></table>' .. descs .. '</tr></table>' .. page_str .. '</html>'
 					t[i].InfoPanelDesc = t[i].InfoPanelDesc:gsub('"', '\"')
 					t[i].InfoPanelName = title .. ' (' .. t[i].Name .. ')'
 					if slogan ~= '' then t[i].InfoPanelTitle = slogan else t[i].InfoPanelTitle = desc end
@@ -972,18 +805,18 @@
             inAdr = answer:match('data%-translator_id="' .. tr .. '"%s+data%-cdn_url="([^"]+)') or answer:match('"streams":"([^"]+)') or background_chanel
 		end
 		local t = {}
-		if inAdr ~= background_chanel then portal_str = ''  wink_str = wink_str .. '</tr></table>' else wink_str = '' end
+		if inAdr ~= background_chanel then portal_str = '' end
 		t[1] = {}
 		t[1].Id = 1
 		t[1].Name = title
 		if slogan ~= '' then t[1].InfoPanelTitle = slogan else t[1].InfoPanelTitle = desc end
 		t[1].InfoPanelName = title
 		t[1].InfoPanelShowTime = 60000
-		t[1].InfoPanelLogo = logo or poster
+		t[1].InfoPanelLogo = poster
 		t[1].InfoPanelDesc = '<html><body bgcolor="#434750" ' .. background1 .. '>' .. portal_str .. '<table width="99%"><tr><td style="padding: 10px 10px 5px;"><center><img src="' .. poster ..
 		'" width="' .. masshtab*300 .. '"></td><td style="padding: 0px 5px 10px; color: #EBEBEB; vertical-align: middle;" width="' .. masshtab*266 .. '"><h5><i><font color=#EBEBEB>' .. slogan .. '</font></i>  <b><font color=#CD7F32>' .. mpaa .. '</font></b></h5><h4><font color=#00FA9A>' .. name_rus .. '</font></h4><h4>' .. str_poisk .. '</h4><h5><font color=#BBBBBB>' .. name_eng ..
 		'<h5>' .. country_ID .. ' ' .. countryr .. ' <font color=#CD7F32>' .. year .. '</font></h5><h5><font color=#BBBBBB>' .. genres_str .. '</font></h5>' .. reting .. time_all .. '</td>' .. desc_top ..
-		'</tr></table>' .. table_person .. table_sp .. frn_str .. table_desc .. '<table width="99%"><tr>' .. desc1 .. '</tr></table><table width="99%"><tr>' .. desc2 .. '</tr></table>' .. desck .. '</tr></table>' .. descs .. '</tr></table>' .. wink_str .. page_str .. '</html>'
+		'</tr></table>' .. table_person .. table_sp .. frn_str .. table_desc .. '<table width="99%"><tr>' .. desc1 .. '</tr></table><table width="99%"><tr>' .. desc2 .. '</tr></table>' .. desck .. '</tr></table>' .. descs .. '</tr></table>' .. page_str .. '</html>'
 		t[1].InfoPanelDesc = t[1].InfoPanelDesc:gsub('"', '\"')
 		t[1].InfoPanelTitle = t[1].InfoPanelTitle:gsub('"', '%%22')
 ------------------
