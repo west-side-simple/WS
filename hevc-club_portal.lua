@@ -1,6 +1,6 @@
--- видеоскрипт для сайта https://rips.club (18/10/20) v.3.0
+-- видеоскрипт для сайта https://rips.club (17/11/20) - portal version
 -- ветка на bugtracker http://iptv.gen12.net/bugtracker/view.php?id=1596
--- авторы nexterr, west_side
+-- авторы nexterr, west_side, wafee
 -- открывает подобные ссылки:
 -- https://rips.club/video-2047/
 -- а так же все ссылки с сайта плюс поиск
@@ -280,15 +280,15 @@
 	t[1] = {}
 	t[1].Id = 1
 	t[1].Name = name_rus
-	t[1].InfoPanelDesc = '<html><body bgcolor="#434750" ' .. background2 .. '><table width="' .. 900*masshtab .. '"><tr><td style="padding: 10px 10px 5px; vertical-align: middle;">' .. portal1_str ..
-	'</td></tr></table></hr><table width="' .. 900*masshtab .. '"><tr><td style="padding: 10px 10px 5px; vertical-align: middle;"><img src="' .. poster ..
+	t[1].InfoPanelDesc = '<html><body bgcolor="#434750" ' .. background2 .. '><table width="100%"><tr><td style="padding: 10px 10px 5px; vertical-align: middle;">' .. portal1_str ..
+	'</td></tr></table></hr><table width="100%"><tr><td style="padding: 10px 10px 5px; vertical-align: middle;"><img src="' .. poster ..
 	'" height="' .. 320*masshtab .. '"></td><td style="padding: 10px 5px 0px; color: #EBEBEB; vertical-align: middle;">' .. desc1 .. reting_table .. '<h5><font color=#CD7F32>' .. alltime ..
 	'</font><a href="simpleTVLua:m_simpleTV.Control.ExecuteAction(37) m_simpleTV.Control.ExecuteAction(116)" style="color:#009B76; font-size: small; text-decoration:none"> 🕜 ГЛАВЫ</a></h5>' ..
 	'</td><td style="padding: 10px 10px 5px; vertical-align: middle;"><img style="float:right;" src="' .. poster:gsub('-0', '-1') ..
 	'" height="' .. 80*masshtab .. '"> <img style="float:right;" src="' .. poster:gsub('-0', '-2') ..
 	'" height="' .. 80*masshtab .. '"> <img style="float:right;" src="' .. poster:gsub('-0', '-3') ..
 	'" height="' .. 80*masshtab .. '"> <img style="float:right;" src="' .. poster:gsub('-0', '-4') ..
-	'" height="' .. 80*masshtab .. '"> </td></tr></table><table width="' .. 900*masshtab .. '"><tr><td style="padding: 0px 10px 5px; color: #EBEBEB; vertical-align: middle;"><h5>'.. desc2 .. 	'</h5><h5>' .. desc .. '</h5></td></tr></table></html>'
+	'" height="' .. 80*masshtab .. '"> </td></tr></table><table width="100%"><tr><td style="padding: 0px 10px 5px; color: #EBEBEB; vertical-align: middle;"><h5>'.. desc2 .. 	'</h5><h5>' .. desc .. '</h5></td></tr></table></html>'
 	t[1].InfoPanelDesc = t[1].InfoPanelDesc:gsub('"', "\"")
 	t[1].InfoPanelTitle = titledesc:gsub('"', '%%22')
 	t[1].InfoPanelName = name_rus
@@ -434,47 +434,47 @@
 				local reting, reting_table = '', ''
 				titledesc = country .. ' | ' .. year .. ' | ' .. reting
 				if genres ~= '' then titledesc = titledesc .. genres end
-					tab[i] = {}
-					tab[i].Id = i
-					tab[i].Name = name_rus
-					tab[i].Address = retAdr .. '$TORRENTINDEX=' .. i - 1
-					tab[i].InfoPanelDesc = '<html><body bgcolor="#434750" ' .. background2 .. '><table width="' .. 900*masshtab .. '"><tr><td style="padding: 10px 10px 5px; vertical-align: middle;">' .. portal1_str ..
-					'</td></tr></table></hr><table width="' .. 900*masshtab .. '"><tr><td style="padding: 10px 10px 5px; vertical-align: middle;"><img src="' .. poster ..
+					t[i] = {}
+					t[i].Id = i
+					t[i].Name = name_rus
+					t[i].Address = retAdr .. '$TORRENTINDEX=' .. i - 1
+					t[i].InfoPanelDesc = '<html><body bgcolor="#434750" ' .. background2 .. '><table width="100%"><tr><td style="padding: 10px 10px 5px; vertical-align: middle;">' .. portal1_str ..
+					'</td></tr></table></hr><table width="100%"><tr><td style="padding: 10px 10px 5px; vertical-align: middle;"><img src="' .. poster ..
 					'" height="' .. 320*masshtab .. '"></td><td style="padding: 10px 5px 0px; color: #EBEBEB; vertical-align: middle;">' .. desc1 .. '<h5><font color=#CD7F32>' .. alltime ..
 					'</font><a href="simpleTVLua:m_simpleTV.Control.ExecuteAction(37) m_simpleTV.Control.ExecuteAction(116)" style="color:#009B76; font-size: small; text-decoration:none"> 🕜 ГЛАВЫ</a></h5>' ..
 					'</td><td style="padding: 10px 10px 5px; vertical-align: middle;"><img style="float:right;" src="' .. poster:gsub('-0', '-1') ..
 					'" height="' .. 80*masshtab .. '"> <img style="float:right;" src="' .. poster:gsub('-0', '-2') ..
 					'" height="' .. 80*masshtab .. '"> <img style="float:right;" src="' .. poster:gsub('-0', '-3') ..
 					'" height="' .. 80*masshtab .. '"> <img style="float:right;" src="' .. poster:gsub('-0', '-4') ..
-					'" height="' .. 80*masshtab .. '"> </td></tr></table><table width="' .. 900*masshtab .. '"><tr><td style="padding: 0px 10px 5px; color: #EBEBEB; vertical-align: middle;"><h5>'.. desc2 .. 	'</h5><h5>' .. desc .. '</h5></td></tr></table></html>'
-					tab[i].InfoPanelDesc = tab[i].InfoPanelDesc:gsub('"', "\"")
-					tab[i].InfoPanelTitle = titledesc:gsub('"', '%%22')
-					tab[i].InfoPanelName = name_rus
-					tab[i].InfoPanelShowTime = 60000
-					tab[i].InfoPanelLogo = poster:gsub('-0', '-1')
+					'" height="' .. 80*masshtab .. '"> </td></tr></table><table width="100%"><tr><td style="padding: 0px 10px 5px; color: #EBEBEB; vertical-align: middle;"><h5>'.. desc2 .. 	'</h5><h5>' .. desc .. '</h5></td></tr></table></html>'
+					t[i].InfoPanelDesc = t[i].InfoPanelDesc:gsub('"', "\"")
+					t[i].InfoPanelTitle = titledesc:gsub('"', '%%22')
+					t[i].InfoPanelName = name_rus
+					t[i].InfoPanelShowTime = 60000
+					t[i].InfoPanelLogo = poster:gsub('-0', '-1')
 				i = i + 1
 			end
-			m_simpleTV.User.hevcClub.titleTab = tab
+			m_simpleTV.User.hevcClub.titleTab = t
 			if m_simpleTV.User.paramScriptForSkin_buttonOk then
-			tab.OkButton = {ButtonImageCx = 30*masshtab, ButtonImageCy = 30*masshtab, ButtonImage = m_simpleTV.User.paramScriptForSkin_buttonOk}
+			t.OkButton = {ButtonImageCx = 30*masshtab, ButtonImageCy = 30*masshtab, ButtonImage = m_simpleTV.User.paramScriptForSkin_buttonOk}
 		end
 		if m_simpleTV.User.paramScriptForSkin_buttonClose then
-			tab.ExtButton1 = {ButtonEnable = true, ButtonImageCx = 30*masshtab, ButtonImageCy = 30*masshtab, ButtonImage = m_simpleTV.User.paramScriptForSkin_buttonClose, ButtonScript = 'OnMultiAddressCancel_hevcClub()'}
+			t.ExtButton1 = {ButtonEnable = true, ButtonImageCx = 30*masshtab, ButtonImageCy = 30*masshtab, ButtonImage = m_simpleTV.User.paramScriptForSkin_buttonClose, ButtonScript = 'OnMultiAddressCancel_hevcClub()'}
 		else
-			tab.ExtButton1 = {ButtonEnable = true, ButtonName = '✕', ButtonScript = 'OnMultiAddressCancel_hevcClub()'}
+			t.ExtButton1 = {ButtonEnable = true, ButtonName = '✕', ButtonScript = 'OnMultiAddressCancel_hevcClub()'}
 		end
 		if m_simpleTV.User.paramScriptForSkin_buttonPlst then
-			tab.ExtButton0 = {ButtonEnable = true, ButtonImageCx = 30*masshtab, ButtonImageCy = 30*masshtab, ButtonImage = m_simpleTV.User.paramScriptForSkin_buttonPlst, ButtonScript = 'm_simpleTV.Control.ExecuteAction(116)'}
+			t.ExtButton0 = {ButtonEnable = true, ButtonImageCx = 30*masshtab, ButtonImageCy = 30*masshtab, ButtonImage = m_simpleTV.User.paramScriptForSkin_buttonPlst, ButtonScript = 'm_simpleTV.Control.ExecuteAction(116)'}
 		else
-			tab.ExtButton0 = {ButtonEnable = true, ButtonName = 'CH', ButtonScript = 'm_simpleTV.Control.ExecuteAction(116)'}
+			t.ExtButton0 = {ButtonEnable = true, ButtonName = 'CH', ButtonScript = 'm_simpleTV.Control.ExecuteAction(116)'}
 		end
 		m_simpleTV.Control.SetTitle(title)
-		m_simpleTV.Control.CurrentAddress = tab[1].Address
+		m_simpleTV.Control.CurrentAddress = t[1].Address
 --	tab.ExtParams = {}
 --	tab.ExtParams.LuaOnCancelFunName = 'OnMultiAddressCancel_hevcClub'
 --	tab.ExtParams.LuaOnOkFunName = 'OnMultiAddressOk_hevcClub'
 --	tab.ExtParams.LuaOnTimeoutFunName = 'OnMultiAddressCancel_hevcClub'
-	m_simpleTV.OSD.ShowSelect_UTF8(title, 0, tab, 8000, 2 + 64)
+	m_simpleTV.OSD.ShowSelect_UTF8(title, 0, t, 8000, 2 + 64)
 	if m_simpleTV.Control.MainMode == 0 then
 		m_simpleTV.Control.ChangeChannelLogo(poster1, m_simpleTV.Control.ChannelID, 'CHANGE_IF_NOT_EQUAL')
 		m_simpleTV.Control.ChangeChannelName(title, m_simpleTV.Control.ChannelID, true)
@@ -606,15 +606,15 @@
 					s, e = episode:match('S(%d+)E(%d+)')
 					if s and e then t[i].Name = tonumber(s) .. ' сезон ' .. tonumber(e) .. ' серия - ' .. t[i].Name end
 					t[i].Address = retAdr .. '$TORRENTINDEX=' .. i - 1
-					t[i].InfoPanelDesc = '<html><body bgcolor="#434750" ' .. background2 .. '><table width="' .. 900*masshtab .. '"><tr><td style="padding: 10px 10px 5px; vertical-align: middle;">' .. portal1_str ..
-					'</td></tr></table></hr><table width="' .. 900*masshtab .. '"><tr><td style="padding: 10px 10px 5px; vertical-align: middle;"><img src="' .. poster ..
+					t[i].InfoPanelDesc = '<html><body bgcolor="#434750" ' .. background2 .. '><table width="100%"><tr><td style="padding: 10px 10px 5px; vertical-align: middle;">' .. portal1_str ..
+					'</td></tr></table></hr><table width="100%"><tr><td style="padding: 10px 10px 5px; vertical-align: middle;"><img src="' .. poster ..
 					'" height="' .. 320*masshtab .. '"></td><td style="padding: 10px 5px 0px; color: #EBEBEB; vertical-align: middle;">' .. desc1 .. '<h5><font color=#CD7F32>' .. alltime ..
 					'</font><a href="simpleTVLua:m_simpleTV.Control.ExecuteAction(37) m_simpleTV.Control.ExecuteAction(116)" style="color:#009B76; font-size: small; text-decoration:none"> 🕜 ГЛАВЫ</a></h5>' ..
 					'</td><td style="padding: 10px 10px 5px; vertical-align: middle;"><img style="float:right;" src="' .. poster:gsub('-0', '-1') ..
 					'" height="' .. 80*masshtab .. '"> <img style="float:right;" src="' .. poster:gsub('-0', '-2') ..
 					'" height="' .. 80*masshtab .. '"> <img style="float:right;" src="' .. poster:gsub('-0', '-3') ..
 					'" height="' .. 80*masshtab .. '"> <img style="float:right;" src="' .. poster:gsub('-0', '-4') ..
-					'" height="' .. 80*masshtab .. '"> </td></tr></table><table width="' .. 900*masshtab .. '"><tr><td style="padding: 0px 10px 5px; color: #EBEBEB; vertical-align: middle;"><h5>'.. desc2 .. 	'</h5><h5>' .. desc .. '</h5></td></tr></table></html>'
+					'" height="' .. 80*masshtab .. '"> </td></tr></table><table width="100%"><tr><td style="padding: 0px 10px 5px; color: #EBEBEB; vertical-align: middle;"><h5>'.. desc2 .. 	'</h5><h5>' .. desc .. '</h5></td></tr></table></html>'
 					t[i].InfoPanelDesc = t[i].InfoPanelDesc:gsub('"', "\"")
 					if e then
 					t[i].InfoPanelTitle = titledesc:gsub('"', '%%22') .. ' - ' .. tonumber(e) .. ' серия' else t[i].InfoPanelTitle = titledesc:gsub('"', '%%22') end
@@ -650,6 +650,24 @@
 	end
 	end
 	end
+	--wafee
+-- local t = {}
+ t.message = t[1].InfoPanelDesc
+ t.richTextMode = true
+ t.header = t[1].InfoPanelTitle
+ t.showTime = 1000*60
+ t.once = true
+ --t.textAlignment = 1
+ t.windowAlignment = 2
+ t.windowMaxSizeH = 1
+ t.windowMaxSizeV = 1
+
+ if m_simpleTV.User.westSide.PortalTable==nil then
+   m_simpleTV.User.westSide.PortalTable=t --кешируем данные в юзер таблицу
+ end  
+if inAdr == background_chanel then
+ show_portal_window() -- hotkey 'I'
+end
 	else
 -------------блок запроса
     answer = answer:gsub('\n', ' ')
@@ -860,8 +878,22 @@ local tab_zapros = {}
 		m_simpleTV.Control.ChangeChannelLogo(poster, m_simpleTV.Control.ChannelID, 'CHANGE_IF_NOT_EQUAL')
 		m_simpleTV.Control.ChangeChannelName(title_zapros, m_simpleTV.Control.ChannelID, false)
 	end
-	m_simpleTV.Control.ExecuteAction(108,0)
-	m_simpleTV.Control.ExecuteAction(108,1)
+--wafee
+-- local t = {}
+ t.message = tab_zapros[1].InfoPanelDesc
+ t.richTextMode = true
+ t.header = tab_zapros[1].InfoPanelTitle
+ t.showTime = 1000*60
+ t.once = true
+ --t.textAlignment = 1
+ t.windowAlignment = 2
+ t.windowMaxSizeH = 1
+ t.windowMaxSizeV = 1
+
+ if m_simpleTV.User.westSide.PortalTable==nil then
+   m_simpleTV.User.westSide.PortalTable=t --кешируем данные в юзер таблицу
+   show_portal_window() -- hotkey 'I'
+ end  
 --------------конец блока запроса
 	end
 -- debug_in_file(retAdr .. '\n')

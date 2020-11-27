@@ -1,5 +1,5 @@
--- видеоскрипт для сайта http://www.lostfilm.tv (02/10/20)
--- авторы nexterr, west_side
+-- видеоскрипт для сайта http://www.lostfilm.tv (17/11/20) - portal version
+-- авторы nexterr, west_side, wafee
 -- необходим: Acestream
 -- логин, пароль установить в 'Password Manager', для id - lostfilm
 -- открывает подобные ссылки:
@@ -20,7 +20,7 @@ local prx = ''
 	local titul_rezka_tor = '<a href = "simpleTVLua:m_simpleTV.Control.PlayAddress(\'https://rezka.cc\/\')"><img src="https://rezka.cc/apple-touch-icon.png" height="' .. 36*masshtab .. '" align="top"></a>'
 	local titul_lostfilm = '<a href = "simpleTVLua:m_simpleTV.Control.PlayAddress(\'https://www.lostfilm.tv/new\/\')"><img src="https://www.lostfilm.tv/favicon.ico" height="' .. 36*masshtab .. '" align="top"></a>'
 	local titul_yt = '<a href = "simpleTVLua:m_simpleTV.Control.PlayAddress(\'https://www.youtube.com/feed/channels\')"><img src="simpleTVImage:./luaScr/user/westSide/icons/menuYT.png" height="' .. 36*masshtab .. '" align="top"></a>'
-	local titul_wink = '<a href = "simpleTVLua:m_simpleTV.Control.PlayAddress(\'https://wink.rt.ru/tv\')"><img src="simpleTVImage:./luaScr/user/westSide/icons/menuWINK.png" height="' .. 36*masshtab .. '" align="top"></a>'
+	local titul_wink = '<a href = "simpleTVLua:m_simpleTV.Control.PlayAddress(\'https://wink.rt.ru/333\')"><img src="simpleTVImage:./luaScr/user/westSide/icons/menuWINK.png" height="' .. 36*masshtab .. '" align="top"></a>'
 	local titul_lostfilm1 = '<a href = "simpleTVLua:m_simpleTV.Control.PlayAddress(\'https://www.lostfilm.tv/series/?type=search&s=1&t=1&o=0\')"><center><img src="simpleTVImage:./luaScr/user/westSide/icons/New.png" height="' .. 60*masshtab .. '"></a>'
 	local titul_lostfilm2 = '<a href = "simpleTVLua:m_simpleTV.Control.PlayAddress(\'https://www.lostfilm.tv/series/?type=search&s=1&t=2&o=0\')"><center><img src="simpleTVImage:./luaScr/user/westSide/icons/Serial_OnAir.png" height="' .. 60*masshtab .. '"></a>'
 	local titul_lostfilm3 = '<a href = "simpleTVLua:m_simpleTV.Control.PlayAddress(\'https://www.lostfilm.tv/series/?type=search&s=1&t=5&o=0\')"><center><img src="simpleTVImage:./luaScr/user/westSide/icons/Serial_End.png" height="' .. 60*masshtab .. '"></a>'
@@ -49,7 +49,7 @@ local prx = ''
 	if Weather then
 		local pogoda = Weather.api.GetCurTemp()
 		if type(pogoda)=="table" then
-			m_simpleTV.OSD.ShowMessage_UTF8( pogoda.cur_temp .. pogoda.letter .. '\n' .. pogoda.cur_icon)
+--			m_simpleTV.OSD.ShowMessage_UTF8( pogoda.cur_temp .. pogoda.letter .. '\n' .. pogoda.cur_icon)
 			pogoda_cur_temp = pogoda.cur_temp
 			pogoda_letter = pogoda.letter
 			pogoda_cur_icon = pogoda.cur_icon
@@ -276,7 +276,24 @@ local prx = ''
 		m_simpleTV.Control.ChangeChannelLogo(logo_video, m_simpleTV.Control.ChannelID, 'CHANGE_IF_NOT_EQUAL')
 		m_simpleTV.Control.ChangeChannelName(name, m_simpleTV.Control.ChannelID, false)
 	end
+			 --wafee
+ --local t = {}
+ t.message = t[1].InfoPanelDesc
+ t.richTextMode = true
+ t.header = t[1].InfoPanelTitle
+ t.showTime = 1000*60
+ t.once = true
+ --t.textAlignment = 1
+ t.windowAlignment = 2
+ t.windowMaxSizeH = 1
+ t.windowMaxSizeV = 1
+
+ if m_simpleTV.User.westSide.PortalTable==nil then
+   m_simpleTV.User.westSide.PortalTable=t --кешируем данные в юзер таблицу
+    show_portal_window() -- hotkey 'I'
+ end 
 		 return
+
 		end
 	if not m_simpleTV.User.lostfilm.cooki then
 		m_simpleTV.User.lostfilm.cooki = m_simpleTV.Config.GetValue('lostfilm_reg') or ''
@@ -594,8 +611,22 @@ local prx = ''
 			retAdr = a1[id].Adress
 			title = title .. ' - ' .. m_simpleTV.User.lostfilm.Tabletitle[1].Name
 		end
-		m_simpleTV.Control.ExecuteAction(108,0)
-		m_simpleTV.Control.ExecuteAction(108,1)
+--wafee
+ local t = {}
+ t.message = a1[1].InfoPanelDesc
+ t.richTextMode = true
+ t.header = a1[1].InfoPanelTitle
+ t.showTime = 1000*60
+ t.once = true
+ --t.textAlignment = 1
+ t.windowAlignment = 2
+ t.windowMaxSizeH = 1
+ t.windowMaxSizeV = 1
+
+ if m_simpleTV.User.westSide.PortalTable==nil then
+   m_simpleTV.User.westSide.PortalTable=t --кешируем данные в юзер таблицу
+    show_portal_window() -- hotkey 'I'
+ end 
 ---
 elseif not retAdr:match('&lostfilm') and not inAdr:match('lostfilm%.tv%/new') and not inAdr:match('lostfilm%.tv%/series%/%?type') and not inAdr:match('lostfilm%.tv%/search%/%?q=') and not inAdr:match('%/episode%_') then
 		m_simpleTV.User.lostfilm.Tabletitle = nil
@@ -744,8 +775,24 @@ elseif not retAdr:match('&lostfilm') and not inAdr:match('lostfilm%.tv%/new') an
 	m_simpleTV.Control.CurrentTitle_UTF8 = title
 	m_simpleTV.OSD.ShowMessageT({text = title, color = 0xff9999ff, showTime = 1000 * 5, id = 'channelName'})
 	m_simpleTV.Control.CurrentAddress = retAdr
-	m_simpleTV.Control.ExecuteAction(108,0)
-	m_simpleTV.Control.ExecuteAction(108,1)
+--	m_simpleTV.Control.ExecuteAction(108,0)
+--	m_simpleTV.Control.ExecuteAction(108,1)
+--wafee
+ local t = {}
+ t.message = as[1].InfoPanelDesc
+ t.richTextMode = true
+ t.header = as[1].InfoPanelTitle
+ t.showTime = 1000*60
+ t.once = true
+ --t.textAlignment = 1
+ t.windowAlignment = 2
+ t.windowMaxSizeH = 1
+ t.windowMaxSizeV = 1
+
+ if m_simpleTV.User.westSide.PortalTable==nil then
+   m_simpleTV.User.westSide.PortalTable=t --кешируем данные в юзер таблицу
+    show_portal_window() -- hotkey 'I'
+ end  
 
 --~~~~~~~~~~~
 ---
@@ -837,8 +884,22 @@ elseif not retAdr:match('&lostfilm') and not inAdr:match('lostfilm%.tv%/new') an
 	m_simpleTV.Control.CurrentTitle_UTF8 = title
 	m_simpleTV.OSD.ShowMessageT({text = title, color = 0xff9999ff, showTime = 1000 * 5, id = 'channelName'})
 	m_simpleTV.Control.CurrentAddress = retAdr
-	m_simpleTV.Control.ExecuteAction(108,0)
-	m_simpleTV.Control.ExecuteAction(108,1)
+--wafee
+ local t = {}
+ t.message = tab[1].InfoPanelDesc
+ t.richTextMode = true
+ t.header = tab[1].InfoPanelTitle
+ t.showTime = 1000*60
+ t.once = true
+ --t.textAlignment = 1
+ t.windowAlignment = 2
+ t.windowMaxSizeH = 1
+ t.windowMaxSizeV = 1
+
+ if m_simpleTV.User.westSide.PortalTable==nil then
+   m_simpleTV.User.westSide.PortalTable=t --кешируем данные в юзер таблицу
+    show_portal_window() -- hotkey 'I'
+ end
 elseif inAdr:match('lostfilm%.tv%/series%/%?type') or inAdr:match('lostfilm%.tv%/search%/%?q=') then
 		local title = 'lostfilm'
 		local url1 = 'https://www.lostfilm.tv'
@@ -959,8 +1020,22 @@ elseif inAdr:match('lostfilm%.tv%/series%/%?type') or inAdr:match('lostfilm%.tv%
 	m_simpleTV.Control.CurrentTitle_UTF8 = title
 	m_simpleTV.OSD.ShowMessageT({text = title, color = 0xff9999ff, showTime = 1000 * 5, id = 'channelName'})
 	m_simpleTV.Control.CurrentAddress = retAdr
-	m_simpleTV.Control.ExecuteAction(108,0)
-	m_simpleTV.Control.ExecuteAction(108,1)
+--wafee
+ local t = {}
+ t.message = tab[1].InfoPanelDesc
+ t.richTextMode = true
+ t.header = tab[1].InfoPanelTitle
+ t.showTime = 1000*60
+ t.once = true
+ --t.textAlignment = 1
+ t.windowAlignment = 2
+ t.windowMaxSizeH = 1
+ t.windowMaxSizeV = 1
+
+ if m_simpleTV.User.westSide.PortalTable==nil then
+   m_simpleTV.User.westSide.PortalTable=t --кешируем данные в юзер таблицу
+    show_portal_window() -- hotkey 'I'
+ end
 	end
 	if not retAdr:match('lostfilm%.tv%/new') and not retAdr:match('lostfilm%.tv%/series') and inAdr:match('%/episode_') then
 	local Posterc = retAdr:match('c=(%d+)')
