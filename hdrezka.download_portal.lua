@@ -1,5 +1,6 @@
--- видеоскрипт для сайта https://rezka.cc/ (28/09/20) v.2.1
+-- видеоскрипт для сайта https://rezka.cc/ (17/11/20) - portal version
 -- необходим: Acestream
+-- авторы nexterr, west_side, wafee
 -- открывает любые ссылки с сайта
 		if m_simpleTV.Control.ChangeAddress ~= 'No' then return end
 	local inAdr = m_simpleTV.Control.CurrentAddress
@@ -261,7 +262,7 @@
 	tab[1].Id = 1
 	tab[1].Name = title
 	tab[1].InfoPanelDesc = '<html><body bgcolor="#434750" ' .. background2 .. '><table width="99%"><tr><td style="padding: 10px 10px 5px; vertical-align: middle;">' .. cover_str ..
-	'</td><td style="padding: 10px 5px 0px; color: #BBBBBB; vertical-align: middle;"><h5>' .. titul_rezka_tor .. titul_hevc .. titul_yt .. titul_rezka .. titul_lostfilm .. titul_wink .. ishd .. '</h5>' .. desc1 .. '</td></tr></table>' .. desc2 .. '</html>'
+	'</td><td style="padding: 10px 5px 0px; color: #BBBBBB; vertical-align: middle;"><h5>' .. titul_rezka_tor .. titul_hevc .. titul_lostfilm .. titul_yt .. titul_rezka .. titul_wink .. ishd .. '</h5>' .. desc1 .. '</td></tr></table>' .. desc2 .. '</html>'
 	tab[1].InfoPanelDesc = tab[1].InfoPanelDesc:gsub('"', "\"")
 	tab[1].InfoPanelTitle = name
 	tab[1].InfoPanelName = title
@@ -284,8 +285,25 @@
 	m_simpleTV.Control.CurrentTitle_UTF8 = title
 	m_simpleTV.OSD.ShowMessageT({text = title, color = 0xff9999ff, showTime = 1000 * 5, id = 'channelName'})
 	m_simpleTV.Control.CurrentAddress = retAdr
+
+	--wafee
+ local t = {}
+ t.message = tab[1].InfoPanelDesc
+ t.richTextMode = true
+ t.header = tab[1].InfoPanelTitle
+ t.showTime = 1000*60
+ t.once = true
+ --t.textAlignment = 1
+ t.windowAlignment = 2
+ t.windowMaxSizeH = 1
+ t.windowMaxSizeV = 1
+
+ if m_simpleTV.User.westSide.PortalTable==nil then
+   m_simpleTV.User.westSide.PortalTable=t --кешируем данные в юзер таблицу
+ end
+	end 
 	end
-	end
+	
 --------------блок стены лого
 		local answer_stena = answer:match('<div class="cardlist cardlist%-cats">.-<script>') or answer:match('<div class="cardlist">.-<script>')
 		title = title:gsub('Скачать ', '')
@@ -393,7 +411,7 @@
 		else
 			tab.ExtButton1 = {ButtonEnable = true, ButtonName = '✕', ButtonScript = 'OnMultiAddressCancel_HDRezka()'}
 		end
-	m_simpleTV.OSD.ShowSelect_UTF8('HD-Rezka', 0, tab, 8000, 32 + 64 + 128)
+--	m_simpleTV.OSD.ShowSelect_UTF8('HD-Rezka', 0, tab, 8000, 32 + 64 + 128)
 	m_simpleTV.Control.SetTitle(title)
 	if m_simpleTV.Control.MainMode == 0 then
 		m_simpleTV.Control.ChangeChannelLogo(cover, m_simpleTV.Control.ChannelID, 'CHANGE_IF_NOT_EQUAL')
@@ -402,8 +420,25 @@
 	m_simpleTV.Control.CurrentTitle_UTF8 = title
 	m_simpleTV.OSD.ShowMessageT({text = title, color = 0xff9999ff, showTime = 1000 * 5, id = 'channelName'})
 	m_simpleTV.Control.CurrentAddress = retAdr
-	m_simpleTV.Control.ExecuteAction(108,0)
-	m_simpleTV.Control.ExecuteAction(108,1)
+--	m_simpleTV.Control.ExecuteAction(108,0)
+--	m_simpleTV.Control.ExecuteAction(108,1)
 --------------конец блока стены лого
-	end
+
+--wafee
+ local t = {}
+ t.message = tab[1].InfoPanelDesc
+ t.richTextMode = true
+ t.header = tab[1].InfoPanelTitle
+ t.showTime = 1000*60
+ t.once = true
+ --t.textAlignment = 1
+ t.windowAlignment = 2
+ t.windowMaxSizeH = 1
+ t.windowMaxSizeV = 1
+
+ if m_simpleTV.User.westSide.PortalTable==nil then
+   m_simpleTV.User.westSide.PortalTable=t --кешируем данные в юзер таблицу
+   show_portal_window() -- hotkey 'I'
+ end  
+ end
 -- debug_in_file(retAdr .. '\n')

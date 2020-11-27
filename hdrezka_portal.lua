@@ -1,6 +1,6 @@
--- видеоскрипт для сайта https://rezka.ag (25/10/20) v.2.6
+-- видеоскрипт для сайта https://rezka.ag (17/11/20) - portal version
 -- ветка на bugtracker http://iptv.gen12.net/bugtracker/view.php?id=1596
--- авторы nexterr, west_side
+-- авторы nexterr, west_side, wafee
 -- открывает подобные ссылки:
 -- https://rezka.ag/films/comedy/31810-horoshie-malchiki-2019.html
 -- https://rezka.ag/series/fiction/34492-porogi-vremeni-1993.html
@@ -344,12 +344,13 @@
 	then t_rezka = ''
 	else t_rezka = '<a href = "simpleTVLua:m_simpleTV.Control.PlayAddress(\'' .. t_rezka .. '\')"><img src="https://rezka.cc/assets/images/favicon.ico" height="' .. 36*masshtab .. '" align="top"></a>'
 	end
+	poisk_wink = '<a href = "simpleTVLua:m_simpleTV.Control.PlayAddress(\'https://wink.rt.ru/search?query=' .. m_simpleTV.Common.toPercentEncoding(name_rus) .. '\')" style="color: #BBBBEE; text-decoration: none;"><img src="https://wink.rt.ru/apple-touch-icon.png" height="' .. 36*masshtab .. '" align="top"></a>'
 	local name_eng = answer:match('alternativeHeadline">(.-)</div>') or ''
 	is_lostfilm = answer:match('%(LostFilm%)')
 	if answer:match('<h2>В качестве</h2>') and is_lostfilm or answer:match('id="translators%-list"') and is_lostfilm then poisk_lostfilm = '<a href = "simpleTVLua:m_simpleTV.Control.PlayAddress(\'https://www.lostfilm.tv/search/?q=' .. name_eng .. '\')"><img src="https://www.lostfilm.tv/favicon.ico" height="' .. 36*masshtab .. '" align="top"></a>' else poisk_lostfilm = '' end
 	if answer:match('<h2>В качестве</h2>') or answer:match('id="translators%-list"') then poisk_kinopoisk = '<a href = "simpleTVLua:m_simpleTV.Control.PlayAddress(\'*' .. name_rus .. '\')"><img src="simpleTVImage:./luaScr/user/westSide/icons/menuKP.png" height="' .. 36*masshtab .. '" align="top"></a>' else poisk_kinopoisk = '' end
 	if answer:match('<h2>В качестве</h2>') or answer:match('id="translators%-list"') then poisk_youtube = '<a href = "simpleTVLua:m_simpleTV.Control.PlayAddress(\'-' .. name_rus .. '\')"><img src="simpleTVImage:./luaScr/user/westSide/icons/menuYT.png" height="' .. 36*masshtab .. '" align="top"></a>' else poisk_youtube = '' end
-	str_poisk = ' ' .. t_rezka .. poisk_lostfilm .. poisk_kinopoisk .. poisk_youtube or ''
+	str_poisk = ' ' .. t_rezka .. poisk_lostfilm .. poisk_kinopoisk .. poisk_youtube .. poisk_wink or ''
 	local mpaa = answer:match('style="color: #666;">(.-+)') or ''
 	local slogan = answer:match('<h2>Слоган</h2>:</td> <td>(.-)</td>') or ''
 	slogan = slogan:gsub('&laquo;', '«'):gsub('&raquo;', '»')
@@ -784,6 +785,22 @@
 			pl = 32
 		end
 		m_simpleTV.OSD.ShowSelect_UTF8(title, 0, t, 10000, 2 + 64 + pl)
+--------------wafee
+-- local t = {}
+ t.message = t[1].InfoPanelDesc
+ t.richTextMode = true
+ t.header = t[1].InfoPanelTitle
+ t.showTime = 1000*60
+ t.once = true
+ --t.textAlignment = 1
+ t.windowAlignment = 2
+ t.windowMaxSizeH = 1
+ t.windowMaxSizeV = 1
+
+ if m_simpleTV.User.westSide.PortalTable==nil then
+   m_simpleTV.User.westSide.PortalTable=t --кешируем данные в юзер таблицу
+ end  
+------------------ 
 		local retAdr = rezkaGetStream(t[1].Address)
 			if not retAdr then
 				m_simpleTV.Http.Close(session)
@@ -852,8 +869,27 @@
 			t.ExtButton1 = {ButtonEnable = true, ButtonName = '✕', ButtonScript = 'OnMultiAddressCancel_rezka()'}
 		end
 		m_simpleTV.OSD.ShowSelect_UTF8('HDrezka', 0, t, 8000, 32 + 64 + 128)
+		--wafee
+-- local t = {}
+ t.message = t[1].InfoPanelDesc
+ t.richTextMode = true
+ t.header = t[1].InfoPanelTitle
+ t.showTime = 1000*60
+ t.once = true
+ --t.textAlignment = 1
+ t.windowAlignment = 2
+ t.windowMaxSizeH = 1
+ t.windowMaxSizeV = 1
+
+ if m_simpleTV.User.westSide.PortalTable==nil then
+   m_simpleTV.User.westSide.PortalTable=t --кешируем данные в юзер таблицу
+ end  
+if inAdr == background_chanel then
+ show_portal_window() -- hotkey 'I'
+end
+-------------------------------------------------
 	end
 	play(inAdr, title)
-	if inAdr == background_chanel then
-	m_simpleTV.Control.ExecuteAction(108,0)
-	m_simpleTV.Control.ExecuteAction(108,1) end
+--	if inAdr == background_chanel then
+--	m_simpleTV.Control.ExecuteAction(108,0)
+--	m_simpleTV.Control.ExecuteAction(108,1) end
