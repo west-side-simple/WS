@@ -22,11 +22,39 @@
 		m_simpleTV.User.paramScriptForSkin_buttonOk = skinPath .. '/img/osd/multiaddress/select.png'
 		m_simpleTV.User.paramScriptForSkin_background_chanel = 'http://sectorradio.com/next-flac'		
 -- for 1080p		
---		m_simpleTV.User.paramScriptForSkin_masshtab = 1.5
---		m_simpleTV.User.paramScriptForSkin_background1 = 'style="background-image: url(simpleTVImage:./luaScr/user/westSide/icons/BG01_1080p.png);"'
---		m_simpleTV.User.paramScriptForSkin_background2 = 'style="background-image: url(simpleTVImage:./luaScr/user/westSide/icons/BG02_1080p.jpg);"'
+		m_simpleTV.User.paramScriptForSkin_masshtab = 1.5
+		m_simpleTV.User.paramScriptForSkin_background1 = 'style="background-image: url(simpleTVImage:./luaScr/user/westSide/icons/BG01_1080p.png);"'
+		m_simpleTV.User.paramScriptForSkin_background2 = 'style="background-image: url(simpleTVImage:./luaScr/user/westSide/icons/BG02_1080p.jpg);"'
 -- for 720p
-		m_simpleTV.User.paramScriptForSkin_masshtab = 1
-		m_simpleTV.User.paramScriptForSkin_background1 = 'style="background-image: url(simpleTVImage:./luaScr/user/westSide/icons/BG01_720p.png);"'
-		m_simpleTV.User.paramScriptForSkin_background2 = 'style="background-image: url(simpleTVImage:./luaScr/user/westSide/icons/BG02_720p.jpg);"'
+--		m_simpleTV.User.paramScriptForSkin_masshtab = 1
+--		m_simpleTV.User.paramScriptForSkin_background1 = 'style="background-image: url(simpleTVImage:./luaScr/user/westSide/icons/BG01_720p.png);"'
+--		m_simpleTV.User.paramScriptForSkin_background2 = 'style="background-image: url(simpleTVImage:./luaScr/user/westSide/icons/BG02_720p.jpg);"'
 	end
+	-------------------------------------------------------------------
+function skin_settings()
+
+m_simpleTV.Control.ExecuteAction(37)
+
+local ws={
+{"Theme classic","theme1"},
+{"Theme mirror","theme2"},
+{"Theme khameleon","theme3"},
+}
+  
+  local t={}
+  for i=1,#ws do
+    t[i] = {}
+    t[i].Id = i
+    t[i].Name = ws[i][1]
+    t[i].Action = ws[i][2]
+  end
+  
+  local ret,id = m_simpleTV.OSD.ShowSelect_UTF8('Skin settings',0,t,9000,1+4+8)
+  if id==nil then return end
+  
+  if ret==1 then 
+ --   t[id].Action
+  end
+ 
+end
+-------------------------------------------------------------------
